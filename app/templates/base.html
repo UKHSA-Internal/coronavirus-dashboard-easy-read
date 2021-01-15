@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="theme-color" content="#0b0c0c">
+	<meta name="description"
+	      content="Official Coronavirus (COVID-19) disease situation dashboard with latest data in the UK.">
+	<meta name="keywords"
+	      content="official,COVID19,COVID-19,Coronavirus,Public Health England,United Kingdom,Data,Charts,Download,Coronavirus tracker,PHE,UK,API,MSOA,postcode,dashboard,easy read,summary">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@PHE_uk">
+	<meta property="og:type" content="website">
+	<meta property="og:locale" content="en_GB"/>
+	<meta property="og:title" content="Official UK Coronavirus Dashboard">
+	<meta property="og:description" content="Easy read summary for {{ area_name }} | Coronavirus in the UK">
+	<meta name="twitter:description" content="Easy read summary {{ area_name }} | Coronavirus in the UK">
+	<meta name="twitter:title" content="Official UK Coronavirus Dashboard - Easy read summary">
+	<meta name="twitter:image" content="https://coronavirus.data.gov.uk/assets/public/images/opengraph-image.png">
+	<meta property="og:image" content="https://coronavirus.data.gov.uk/assets/public/images/opengraph-image.png">
+	<link rel="preload" href="/assets/govuk-frontend/govuk/assets/fonts/light-94a07e06a1-v2.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="/assets/govuk-frontend/govuk/assets/fonts/bold-b542beb274-v2.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="/assets/application.css?tm={{ timestamp }}" as="style" type="text/css">
+	<link rel="preload" href="{{ url_for("static", filename="easy_read.css") }}?tm={{ timestamp }}" as="style" type="text/css">
+	<title>
+		{%- if postcode -%}
+			{{ postcode }} &mdash; {{ area_name }}
+		{%- else -%}
+			{{ area_name }}
+		{%- endif -%}
+	</title>
+	{% include "components/analytics.html" %}
+</head>
+<body class="govuk-template__body {% block full_class %}{% endblock %}">
+{% block full_content %}
+<script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+	{%- include "components/mobile_nav.html" -%}
+<div class="govuk-width-container">
+	{%- cache 600, 'timestamp', timestamp -%}
+		<div class="govuk-!-margin-top-5 govuk-!-margin-bottom-5" role="region" aria-labelledby="last-update">
+			<p class="govuk-body-s" id="last-update">
+				Last updated on&nbsp;<time datetime="{{ timestamp }}">{{ timestamp | format_timestamp }}</time>
+			</p>
+		</div>
+	{%- endcache -%}
+	<main class="govuk-main-wrapper" id="main-content" role="main">
+		<div class="dashboard-container">
+			{%- include "components/nav.html" -%}
+			<div class="main">
+				<div id="top">
+					<div class="sticky-header govuk-!-padding-top-3">
+						<div class="sticky-header govuk-grid-row govuk-!-margin-top-0" style="width: 100%">
+							<div class="govuk-grid-column-one-half">
+								<h1 class="govuk-caption-l govuk-!-margin-bottom-0 govuk-!-margin-top-0 panel-title-new">{%- block page_title -%}{%- endblock -%}</h1>
+							</div>
+						</div>
+						<div class="govuk-grid-row govuk-!-margin-top-0">
+							<div class="govuk-grid-column-full">
+								<hr class="govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-2 govuk-section-break--visible">
+							</div>
+						</div>
+					</div>
+				</div>
+				{%- block main -%}{%- endblock -%}
+				{%- block lower_section -%}{%- endblock -%}
+			</div>
+		</div>
+	</main>
+</div>
+{%- cache 43200, 'footer', timestamp -%}
+	{% include "components/footer.html" %}
+{%- endcache -%}
+<script type="application/javascript">document.querySelector("#mobile-menu-btn").onclick = function mobileMenu(){var ms = document.getElementById("mobile-navigation").style;ms.display = ms.display === "none" ? "inline-block" : "none";}</script>
+<script type="application/javascript">function trimCode(){console.log("boo");this['postcode'].value = this['postcode'].value.trim();}document.querySelector("form[name=postcode-search]").addEventListener("submit", trimCode);</script>
+{% endblock %}
+</body>
+</html>

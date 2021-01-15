@@ -1,0 +1,15 @@
+{% set latest = deaths.latest %}
+{% set lastWeek = deaths.previous %}
+
+<h3 id="deaths">Deaths{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %}</h3>
+<p>There {{ latest.value | pluralise("was", "were", "were") }}&nbsp;<b>{{ latest.value | format_number }}</b>&nbsp;death{{ latest.value | pluralise("", "s", "s") }}
+	within 28 days of a positive test for coronavirus reported on {{ latest.formatted }}.</p>
+<p>Between {{ lastWeek.formatted }} and {{ latest.formatted }}, there have
+	been <b>{{ latest.rollingSum | format_number }}</b> deaths within 28 days of a positive coronavirus test.
+	This shows {{ latest.change | comparison_verb("an increase", "a decrease", "no change" ) }}&nbsp;
+	{%- if latest.change != 0 -%}
+		of&nbsp;<b>{{ latest.percentage | format_number }}%</b>&nbsp;
+	{%- endif -%}
+	compared to the previous 7 days.
+</p>
+

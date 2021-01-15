@@ -1,0 +1,19 @@
+{% set latest = testing.latest %}
+{% set lastWeek = testing.previous %}
+
+<h3 id="testing">Testing{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %}</h3>
+<p>Testing is where we do a test to see who has coronavirus. Some people are tested more than
+	once.</p>
+
+<p>There {{ latest.value | pluralise("was", "were", "were") }} <b>{{ latest.value | format_number }}</b>
+	test{{ latest.value | pluralise("", "s", "s") }}
+	reported on {{ latest.formatted }}.
+	This shows {{ latest.change | comparison_verb("an increase", "a decrease", "no change" ) }}
+	{% if latest.change != 0 -%}
+		of <b>{{ latest.percentage | format_number }}%</b>
+	{%- endif %}
+	compared to the previous 7 days.
+</p>
+
+<p>Between {{ lastWeek.formatted }} and {{ latest.formatted }}, there have
+	been&nbsp;<b>{{ latest.rollingSum | format_number }}</b>&nbsp;tests.</p>

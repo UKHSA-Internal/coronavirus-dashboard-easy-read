@@ -1,0 +1,23 @@
+{% set latest = cases.latest %}
+{% set lastWeek = cases.previous %}
+
+<h3 id="cases">Cases{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %}</h3>
+<p>
+	A confirmed case is someone who has tested positive for coronavirus.
+</p>
+
+<p>
+	<b>{{ latest.value | format_number }}</b> new {{ latest.value | pluralise("person", "people") }} had
+	a confirmed positive test result reported on {{ latest.formatted }}.
+</p>
+
+<p>
+	Between {{ lastWeek.formatted }} and {{ latest.formatted }},
+	<b>{{ latest.rollingSum | format_number }}</b> people had a confirmed positive
+	test result.
+	This shows {{ latest.change | comparison_verb("an increase", "a decrease", "no change" ) }}
+	{% if latest.change != 0 -%}
+		of <b>{{ latest.percentage | format_number }}%</b>
+	{%- endif %}
+	compared to the previous 7 days.
+</p>

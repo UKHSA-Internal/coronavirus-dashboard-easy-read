@@ -1,0 +1,42 @@
+{% set latest = admissions.latest %}
+{% set lastWeek = admissions.previous %}
+
+<h3 id="healthcare">Healthcare{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %}</h3>
+<p>Some people with coronavirus have to go into hospital.</p>
+<p><b>{{ latest.value | format_number }}</b> {{ latest.value | pluralise("person", "people", "people") }} with
+	coronavirus went into hospital on {{ latest.formatted }}.</p>
+<p>Between {{ lastWeek.formatted }} and {{ latest.formatted }},
+	<b>{{ latest.rollingSum | format_number }}</b>&nbsp;went into hospital with coronavirus.
+	This shows {{ latest.change | comparison_verb("an increase", "a decrease", "no change" ) }}
+	{% if latest.change != 0 -%}
+		of <b>{{ latest.percentage | format_number }}%</b>
+	{%- endif %}
+	compared to the previous 7 days.
+</p>
+
+
+
+{% set latest = in_patients.latest %}
+{% set lastWeek = in_patients.previous %}
+
+<p>
+	There {{ latest.value | pluralise("was", "were", "were") }} <b>{{ latest.value | format_number }}</b>
+	{{ latest.value | pluralise("patient", "patients", "patients") }} in hospital with coronavirus
+	on {{ latest.formatted }}.
+</p>
+
+
+
+{% set latest = ventilators.latest %}
+{% set lastWeek = ventilators.previous %}
+
+<p>
+	Some people in the hospital need to use a special device called a mechanical ventilator
+	to help them breathe.
+</p>
+
+<p>
+	There {{ latest.value | pluralise("was", "were", "were") }} <b>{{ latest.value | format_number }}</b>
+	coronavirus {{ latest.value | pluralise("patient", "patients", "patients") }} in hospital
+	beds with a mechanical ventilator on {{ latest.formatted }}.
+</p>

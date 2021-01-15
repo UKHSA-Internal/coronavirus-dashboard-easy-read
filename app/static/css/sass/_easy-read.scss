@@ -1,0 +1,161 @@
+@page {
+  size: auto;
+  margin: 3cm 3cm 1.5cm 3cm !important;
+}
+
+.page {
+  page-break-after: always;
+}
+
+.print-me {
+  position: fixed;
+  top: 0;
+  right: 0;
+  @extend .govuk-\!-margin-bottom-0;
+  width: 100%;
+  height: fit-content;
+  padding: 1rem;
+
+  @include govuk-media-query($until: tablet) {
+    background: rgba(255, 255, 255, 0.8);
+    padding: .5rem;
+  }
+
+  button {
+    position: relative;
+    //right: 1rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    float: right;
+    max-width: max-content !important;
+  }
+
+  @media print {
+    display: none;
+  }
+}
+
+.easy-read {
+
+  &>main {
+    max-width: 50em;
+    margin: 0 auto;
+
+    padding-top: 4rem;
+
+    @media print {
+      padding-top: 0;
+    }
+
+  }
+
+  //@media print {
+  //  .content {
+  //    page-break-after: always;
+  //  }
+  //}
+
+  article {
+    & header {
+      @extend .govuk-\!-margin-bottom-3;
+      text-align: center;
+
+      @media print {
+        margin-bottom: 1cm !important;
+      }
+
+      & .intro {
+        margin-top: 1.5cm !important;
+        text-align: left;
+      }
+    }
+    & p {
+      @extend .govuk-body-m;
+      line-height: 150% !important;
+    }
+
+    nav.toc {
+
+      ul>li:before {
+        content: "\2014";
+        margin-right: 5px;
+      }
+
+      a {
+        @extend .govuk-link;
+        @extend .govuk-link--no-visited-state;
+        @extend .govuk-\!-font-weight-bold;
+        text-decoration: none;
+      }
+
+    }
+
+    @media print {
+      line-height: 150%;
+      //padding-bottom: 2cm;
+    }
+  }
+
+  tfoot .footer-space {
+    //height: 50px;
+  }
+
+  footer {
+    @extend .govuk-body-s;
+    border-top: 1px solid #e1e1e1;
+    padding-top: 2mm;
+
+    p {
+      @extend .govuk-\!-margin-bottom-0;
+      @extend .govuk-\!-margin-top-0;
+    }
+
+    p:not(.small) {
+      @extend .govuk-\!-margin-bottom-1;
+    }
+
+    p > a {
+      @extend .govuk-link;
+      @extend .govuk-link--no-visited-state;
+    }
+
+    p.small {
+      @extend .govuk-\!-font-size-14;
+    }
+
+    .copyright {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    @media print {
+      position: fixed;
+      bottom: 0;
+      font-size: 10pt;
+
+      p.small {
+        font-size: 8pt !important;
+      }
+
+      .copyright {
+        margin-top: -2mm;
+      }
+
+      svg {
+        margin-top: 3mm;
+      }
+    }
+
+  }
+
+  h3 {
+    margin-top: 2em;
+    @extend .govuk-heading-m;
+
+    @media print {
+      margin-top: 1cm;
+    }
+  }
+
+}
