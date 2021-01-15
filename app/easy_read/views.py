@@ -93,7 +93,6 @@ def easy_read() -> render_template:
 
     if postcode is not None:
         area = get_area_data(AreaType.postcode, postcode)
-
         area_type = "msoa"
 
         if area_name is None:
