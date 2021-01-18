@@ -20,14 +20,8 @@ __all__ = [
 
 ENVIRONMENT = getenv("API_ENV", "PRODUCTION")
 
-
-# class TracedCache(Cache):
-#     def __getattr__(self, item):
-#         self.__dict__.get(item)
-# TracedCache().memoize()
-
-cache_client = Cache(config={
-    "CACHE_TYPE": "redis" if not Config.DEBUG else "null",
+cache_config = {
+    "CACHE_TYPE": "redis",
     "CACHE_DEFAULT_TIMEOUT": 300,
     "CACHE_KEY_PREFIX": "easy-read::",
     "CACHE_OPTIONS": {
@@ -38,7 +32,16 @@ cache_client = Cache(config={
     "CACHE_REDIS_PORT": int(getenv(f"AZURE_REDIS_PORT")),
     "CACHE_REDIS_PASSWORD": getenv(f"AZURE_REDIS_PASSWORD"),
     "CACHE_REDIS_DB": 0
-})
+}
+
+
+if Config.DEBUG:
+    cache_config = {
+        "CACHE_TYPE": "null",
+    }
+
+
+cache_client = Cache(config=cache_config)
 
 
 
