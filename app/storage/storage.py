@@ -41,6 +41,18 @@ DEFAULT_CACHE_CONTROL = "no-cache, max-age=0, stale-while-revalidate=300"
 CONTENT_LANGUAGE = 'en-GB'
 
 
+class LockBlob:
+    def __init__(self, client: BlobClient, duration: int):
+        self.client = client
+        self.lock = self.client.acquire_lease(duration)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.lock.release()
+
+
 class StorageClient:
     """
     Azure Storage client.
@@ -99,6 +111,7 @@ class StorageClient:
         self._connection_string = connection_string
         self._container_name = container
         self._tier = getattr(StandardBlobTier, tier, None)
+        self._lock = None
 
         if self._tier is None:
             raise ValueError(
@@ -147,6 +160,21 @@ class StorageClient:
     def set_tier(self, tier: str):
         self.client.set_standard_blob_tier(tier)
 
+    def lock_file(self, duration):
+        lock_inst = LockBlob(self.client, duration)
+        self._lock = lock_inst.lock
+        return self._lock
+
+    def is_locked(self):
+        if self._lock is not None:
+            return True
+
+        props = self.client.get_blob_properties()
+        return props.lease.status == "locked"
+
+    def exists(self) -> bool:
+        return self.client.exists()
+
     def upload(self, data: Union[str, bytes], overwrite: bool = True) -> NoReturn:
         """
         Uploads blob data to the storage.
@@ -175,17 +203,18 @@ class StorageClient:
             overwrite=overwrite,
             standard_blob_tier=self._tier,
             timeout=60,
-            max_concurrency=10
+            max_concurrency=10,
+            lease=self._lock
         )
         logging.info(f"Uploaded blob '{self._container_name}/{self.path}'")
 
     def download(self) -> StorageStreamDownloader:
-        data = self.client.download_blob()
+        data = self.client.download_blob(lease=self._lock)
         logging.info(f"Downloaded blob '{self._container_name}/{self.path}'")
         return data
 
     def delete(self):
-        self.client.delete_blob()
+        self.client.delete_blob(lease=self._lock)
         logging.info(f"Deleted blob '{self._container_name}/{self.path}'")
 
     def list_blobs(self):
