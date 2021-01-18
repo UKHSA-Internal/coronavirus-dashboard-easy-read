@@ -166,9 +166,6 @@ class StorageClient:
         return self._lock
 
     def is_locked(self):
-        if self._lock is not None:
-            return True
-
         props = self.client.get_blob_properties()
         return props.lease.status == "locked"
 
