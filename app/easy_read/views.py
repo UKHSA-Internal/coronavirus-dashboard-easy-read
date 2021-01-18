@@ -5,6 +5,7 @@
 # Python:
 from functools import wraps
 from typing import Union, TypedDict, Dict
+from os import getenv
 
 # 3rd party:
 from flask import render_template, make_response, request, current_app as app, redirect
@@ -19,6 +20,9 @@ __all__ = [
     'easy_read',
     'local_easy_read'
 ]
+
+
+URL_LOCATION = getenv("URL_LOCATION")
 
 
 class SingleMetricType(TypedDict):
@@ -97,7 +101,7 @@ def process_postcode_request(postcode) -> make_response:
     if area_name is None:
         area_type = "utla"
 
-    resp = redirect(f'/easy_read/{area_type}/{area.get(area_type)}', code=308)
+    resp = redirect(f'https://{URL_LOCATION}/easy_read/{area_type}/{area.get(area_type)}', code=308)
 
     return make_response(resp)
 
