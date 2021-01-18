@@ -1,0 +1,44 @@
+{% set latest = admissions.latest %}
+{% set lastWeek = admissions.previous %}
+
+\section{Healthcare{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %} }
+
+Some people with coronavirus have to go into hospital.
+
+{\bf{{ latest.value | format_number }}} {{ latest.value | pluralise("person", "people", "people") }} with
+coronavirus went into hospital on {{ latest.formatted }}.
+
+
+Between {{ lastWeek.formatted }} and {{ latest.formatted }},
+{\bf{{ latest.rollingSum | format_number }}} went into hospital with coronavirus.
+This shows {{ latest.change | comparison_verb("an increase", "a decrease", "no change" ) }}
+{% if latest.change != 0 -%}
+    of {\bf{{ latest.percentage | format_number }}\%}
+{%- endif %}
+compared to the previous 7 days.
+
+
+
+
+{% set latest = in_patients.latest %}
+{% set lastWeek = in_patients.previous %}
+
+
+There {{ latest.value | pluralise("was", "were", "were") }} {\bf{{ latest.value | format_number }}}
+{{ latest.value | pluralise("patient", "patients", "patients") }} in hospital with coronavirus
+on {{ latest.formatted }}.
+
+
+
+
+{% set latest = ventilators.latest %}
+{% set lastWeek = ventilators.previous %}
+
+
+Some people in the hospital need to use a special device called a mechanical ventilator
+to help them breathe.
+
+
+There {{ latest.value | pluralise("was", "were", "were") }} {\bf{{ latest.value | format_number }}}
+coronavirus {{ latest.value | pluralise("patient", "patients", "patients") }} in hospital
+beds with a mechanical ventilator on {{ latest.formatted }}.

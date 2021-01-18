@@ -1,0 +1,21 @@
+{% set latest = cases.latest %}
+{% set lastWeek = cases.previous %}
+
+\section{Cases{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %} }
+
+A confirmed case is someone who has tested positive for coronavirus.
+
+
+{\bf{{ latest.value | format_number }}} new {{ latest.value | pluralise("person", "people") }} had
+a confirmed positive test result reported on {{ latest.formatted }}.
+
+
+Between {{ lastWeek.formatted }} and {{ latest.formatted }},
+{\bf{{ latest.rollingSum | format_number }}} people had a confirmed positive
+test result.
+This shows {{ latest.change | comparison_verb("an increase", "a decrease", "no change" ) }}
+{% if latest.change != 0 -%}
+    of {\bf{{ latest.percentage | format_number }}\%}
+{%- endif %}
+compared to the previous 7 days.
+

@@ -1,0 +1,88 @@
+{% if area_name != "United Kingdom" %}
+    {% set testingAreaName = "in " + testing.latest.areaName %}
+    {% set casesAreaName = "in " + cases.latest.areaName %}
+    {% set admissionsAreaName = "in " + admissions.latest.areaName %}
+    {% set vaccinationsAreaName = "in " + vaccinations_first.latest.areaName %}
+    {% set deathsAreaName = "in " + deaths.latest.areaName %}
+{% endif %}
+
+\documentclass[A4,12pt]{extarticle}
+\usepackage[a4paper, total={5.8in, 8in}, bmargin=1.5in, tmargin=1.5in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{ragged2e}
+\usepackage{graphicx}
+\usepackage{helvet}
+
+\renewcommand*\familydefault{\sfdefault}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3mm}
+\renewcommand{\baselinestretch}{1.5}
+\graphicspath{ {/app/static/images/} }
+
+{% raw %}
+\makeatletter
+\renewcommand{\@seccntformat}[1]{}
+\makeatother
+{% endraw %}
+
+\title{
+\vspace{-2.0cm}
+    \textbf{Coronavirus (COVID-19) in the UK}\\
+    {\large %
+        Easy read summary \\[-2mm]
+        for \\[-5mm]%
+    }
+    {\Large\textbf{ {{ area_name }} }}
+}
+\date{}
+
+\lhead{\footnotesize Coronavirus in the UK: Easy read document --- {{ area_name }} }
+\rhead{\footnotesize\thepage}
+\fancyfoot[C]{\begin{minipage}{\textwidth}%
+{\footnotesize %
+Produced by \textbf{Public Health England} --- Last updated on {{ timestamp | format_timestamp }}.
+}\\
+{\scriptsize %
+    Statistics and details are available on the
+    \href{https://coronavirus.data.gov.uk}{Coronavirus (COVID-19) in the UK} website.\\
+    \includegraphics[width=6mm]{ogl.png} All content is available under the Open Government Licence v3.0, except where otherwise stated.
+}%
+\end{minipage}}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{1pt}
+
+\begin{document}
+\raggedright
+\pagestyle{fancy}
+\maketitle
+
+\vspace{-1cm}
+
+This information comes from the UK Government.\par
+
+This easy read document explains the key statistics presented on the
+\textbf{\href{https://coronavirus.data.gov.uk}{UK Coronavirus (COVID-19) Dashboard}}.
+It was last updated on {{ timestamp | as_date }}
+
+\vspace{1cm}
+
+{\linespread{1}
+\tableofcontents
+}
+\pagebreak
+
+{% include 'latex/sections/testing.tex' %}
+{% include 'latex/sections/cases.tex' %}
+{% include 'latex/sections/vaccinations.tex' %}
+\pagebreak
+
+{% include 'latex/sections/healthcare.tex' %}
+{% include 'latex/sections/deaths.tex' %}
+
+
+\end{document}

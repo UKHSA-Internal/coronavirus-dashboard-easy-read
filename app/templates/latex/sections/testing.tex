@@ -1,0 +1,19 @@
+{% set latest = testing.latest %}
+{% set lastWeek = testing.previous %}
+
+\section{Testing{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %} }
+
+Testing is where we do a test to see who has coronavirus.
+Some people are tested more than once.
+
+There {{ latest.value | pluralise("was", "were", "were") }} {\bf{{ latest.value | format_number }}}
+test{{ latest.value | pluralise("", "s", "s") }} reported on {{ latest.formatted }}.
+This shows {{ latest.change | comparison_verb("an increase", "a decrease", "no change" ) }}
+{% if latest.change != 0 -%}
+of {\bf{{ latest.percentage | format_number }}\%}
+{%- endif %}
+compared to the previous 7 days.
+
+
+Between {{ lastWeek.formatted }} and {{ latest.formatted }}, there have
+been {\bf{{ latest.rollingSum | format_number }}} tests.
