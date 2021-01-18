@@ -116,14 +116,14 @@ def get_area_data(area_type, area_code) -> Dict[str, str]:
 
 
 @cache_client.memoize(60 * 60 * 6)
-def get_easy_read_data(timestamp, metric_data, area=None):
+def get_easy_read_data(timestamp, metric_data, **area):
     category = metric_data["category"]
     metric = metric_data['metric']
 
     area_type = AreaType.uk
     area_code = "K02000001"  # UK code
 
-    if area is not None:
+    if len(area):
         area_type = metric_data["postcode_destination"]
 
         if category == "vaccinations":
