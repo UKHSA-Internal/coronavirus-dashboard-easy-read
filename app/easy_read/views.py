@@ -3,13 +3,14 @@
 # Imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Python:
+from functools import wraps
+from typing import Union, TypedDict, Dict
 
 # 3rd party:
-from flask import render_template, make_response, request, g, current_app as app, redirect
-
+from flask import render_template, make_response, request, current_app as app, redirect
 
 # Internal:
-from .utils import get_validated_postcode
+from ..common.caching import cache_client
 from ..common.data.queries import get_easy_read_data, get_area_data, AreaType
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -20,7 +21,16 @@ __all__ = [
 ]
 
 
-metrics = {
+class SingleMetricType(TypedDict):
+    metric: str
+    postcode_destination: str
+    category: str
+
+
+MetricsType = Dict[str, SingleMetricType]
+
+
+metrics: MetricsType = {
     'cases': {
         "metric": 'newCasesByPublishDate',
         "postcode_destination": "ltla",
@@ -64,49 +74,92 @@ metrics = {
 }
 
 
-def local_easy_read(area_type, area_code) -> render_template:
-    if request.method == "HEAD":
-        return make_response("", 200)
+def cache_header(max_age: int, **kwargs):
+    def decorator(view):
+        cacher = cache_client.memoize(max_age, **kwargs)(view)
 
-    area = get_area_data(area_type, area_code)
+        @wraps(cacher)
+        def wrapper(*args, **kws):
+            resp = cacher(*args, **kws)
+            return resp.make_conditional(request)
 
+        return wrapper
+
+    return decorator
+
+
+# @cache_client.memoize(60 * 60 * 24)
+def process_postcode_request(postcode) -> make_response:
+    area = get_area_data(AreaType.postcode, postcode)
+    area_type = "msoa"
     area_name = area.get(f"{area_type}Name")
 
+    if area_name is None:
+        area_type = "utla"
+
+    resp = redirect(f'/easy_read/{area_type}/{area.get(area_type)}', code=308)
+
+    return make_response(resp)
+
+
+@cache_header(60 * 60)
+def create_response(timestamp: str, template: str, **data) -> make_response:
+    resp = render_template(template, release_timestamp=timestamp, **data)
+    return make_response(resp)
+
+
+def from_database(timestamp: str, **area):
     data = {
-        key: get_easy_read_data(g.timestamp, value, area)
+        key: get_easy_read_data(timestamp, value, **area)
         for key, value in metrics.items()
     }
 
-    return render_template(
-        "easy_read.html",
+    return data
+
+
+@cache_client.memoize(60 * 60)
+def local_easy_read(timestamp: str, area_type: str, area_code: str,
+                    template: str = "html/easy_read.html") -> render_template:
+    area = get_area_data(area_type, area_code)
+    area_type = area_type.lower()
+    area_name = area.get(f"{area_type}Name")
+    area_code = area.get(area_type)
+
+    if area_type == AreaType.msoa:
+        area_name += f", {area.get('utlaName')}"
+    else:
+        area_name = area.get('utlaName')
+
+    data = from_database(timestamp, **area)
+
+    resp = create_response(
+        timestamp,
+        template,
         area_name=area_name,
+        area_code=area_code,
+        area_type=area_type,
         **data,
     )
 
+    return resp
 
-def easy_read() -> render_template:
-    if request.method == "HEAD":
-        return make_response("", 200)
 
-    postcode = get_validated_postcode(request.args)
+def easy_read(timestamp: str, postcode: Union[None, str],
+              template: str = "html/easy_read.html") -> render_template:
+
     area_name = "United Kingdom"
 
     if postcode is not None:
-        area = get_area_data(AreaType.postcode, postcode)
-        area_type = "msoa"
+        return process_postcode_request(postcode)
 
-        if area_name is None:
-            area_type = "ltla"
+    data = from_database(timestamp)
 
-        return redirect(f'/easy_read/{area_type}/{area.get(area_type)}', code=308)
-
-    data = {
-        key: get_easy_read_data(g.timestamp, value)
-        for key, value in metrics.items()
-    }
-
-    return render_template(
-        "easy_read.html",
+    resp = create_response(
+        timestamp,
+        template,
+        area_type=AreaType.uk,
         area_name=area_name,
-        **data,
+        **data
     )
+
+    return resp
