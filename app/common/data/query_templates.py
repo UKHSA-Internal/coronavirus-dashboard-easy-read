@@ -26,7 +26,13 @@ WHERE c.type = 'general'\
 
 
 PostcodeAreaCodeLookup = Template("""\
-SELECT TOP 1 *
+SELECT TOP 1 
+    c.nation, c.nationName, 
+    c.nhsTrust, c.nhsTrustName,
+    c.nhsRegion, c.nhsRegionName,
+    c.utla, c.utlaName, 
+    c.ltla, c.ltlaName, 
+    c.msoa, c.msoaName
 FROM     c
 WHERE    c.type         = 'postcode'
      AND c.${area_type} = @areaCode\
