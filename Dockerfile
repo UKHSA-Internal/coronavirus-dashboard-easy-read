@@ -24,6 +24,8 @@ ENV UWSGI_PROCESSES 16
 WORKDIR /app
 
 RUN apt-get update && apt-get upgrade -y --no-install-recommends
+RUN apt-get install -qy build-essential --no-install-recommends
+RUN apt-get install texlive -y --no-install-recommends
 
 COPY --from=builder /app/static/dist ./static
 COPY app/static/images               ./static/images
