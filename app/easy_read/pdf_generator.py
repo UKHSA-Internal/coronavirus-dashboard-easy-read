@@ -29,7 +29,6 @@ PDF_CACHE = "public, max-age=86400, s-maxage=604800"
 CONTAINER = "ondemand"
 LOCK_DURATION = 15  # seconds
 WAIT_DURATION = 5  # seconds
-URL_LOCATION = getenv("URL_LOCATION")
 
 
 def name2url(name):
@@ -93,6 +92,6 @@ def create_and_redirect(area_type, area_code):
                         "Failed to obtained the file - lock was not released."
                     )
 
-    resp = redirect(f"https://{URL_LOCATION}/downloads/{CONTAINER}/{path}", code=303)
+    resp = redirect(f"/downloads/{CONTAINER}/{path}", code=303)
 
     return make_response(resp)

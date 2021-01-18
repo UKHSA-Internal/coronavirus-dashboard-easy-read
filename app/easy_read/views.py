@@ -22,9 +22,6 @@ __all__ = [
 ]
 
 
-URL_LOCATION = getenv("URL_LOCATION")
-
-
 class SingleMetricType(TypedDict):
     metric: str
     postcode_destination: str
@@ -101,7 +98,7 @@ def process_postcode_request(postcode) -> make_response:
     if area_name is None:
         area_type = "utla"
 
-    resp = redirect(f'https://{URL_LOCATION}/easy_read/{area_type}/{area.get(area_type)}', code=308)
+    resp = redirect(f'/easy_read/{area_type}/{area.get(area_type)}', code=308)
 
     return make_response(resp)
 
