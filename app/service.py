@@ -320,7 +320,7 @@ def health_check(**kwargs):
     raise RuntimeError("Healthcheck failed.")
 
 
-@app.route("/easy_read/", methods=("HEAD", "OPTIONS", "GET"),
+@app.route("/easy_read", methods=("HEAD", "OPTIONS", "GET"),
            defaults={"area_type": None, "area_code": None})
 @app.route("/easy_read/<area_type>/<area_code>", methods=("HEAD", "OPTIONS", "GET"))
 def local_responder(area_type, area_code, **kwargs):
@@ -335,7 +335,7 @@ def local_responder(area_type, area_code, **kwargs):
     return app.make_default_options_response()
 
 
-@app.route("/easy_read/download/", methods=("HEAD", "OPTIONS", "GET"),
+@app.route("/easy_read/download", methods=("HEAD", "OPTIONS", "GET"),
            defaults={"area_type": None, "area_code": None})
 @app.route("/easy_read/download/<area_type>/<area_code>",
            methods=("HEAD", "OPTIONS", "GET"))
