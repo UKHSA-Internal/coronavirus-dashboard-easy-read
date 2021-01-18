@@ -21,9 +21,8 @@
     padding: .5rem;
   }
 
-  button {
+  a {
     position: relative;
-    //right: 1rem;
     margin-right: 1rem;
     margin-left: 1rem;
     float: right;
@@ -41,19 +40,14 @@
     max-width: 50em;
     margin: 0 auto;
 
-    padding-top: 4rem;
+    padding: 4rem 0.5rem;
+    //padding-top: 4rem;
 
     @media print {
       padding-top: 0;
     }
 
   }
-
-  //@media print {
-  //  .content {
-  //    page-break-after: always;
-  //  }
-  //}
 
   article {
     & header {
@@ -92,12 +86,7 @@
 
     @media print {
       line-height: 150%;
-      //padding-bottom: 2cm;
     }
-  }
-
-  tfoot .footer-space {
-    //height: 50px;
   }
 
   footer {
