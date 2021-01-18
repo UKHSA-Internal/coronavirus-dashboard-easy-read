@@ -45,4 +45,8 @@ RUN python3 -m pip install --no-cache-dir -U pip                      && \
     python3 -m pip install -U --no-cache-dir -r ./requirements.txt    && \
     rm ./requirements.txt
 
+COPY ./prestart.sh                  /app/prestart.sh
+COPY ./entrypoint.py                /entrypoint.py
+
+
 EXPOSE 5000
