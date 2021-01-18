@@ -8,6 +8,12 @@ map $http_upgrade $connection_upgrade {
 
 }
 
+upstream easy_read {
+
+    server             unix:///tmp/uwsgi.sock;
+
+}
+
 
 server {
 
@@ -24,7 +30,7 @@ server {
     access_log         /var/log/nginx/access.log  main;
     sendfile           on;
 
-    location  / {
+    location / {
 
         try_files              $uri @app;
 
@@ -37,7 +43,9 @@ server {
     location @app {
 
         include                uwsgi_params;
-        uwsgi_pass             unix:///tmp/uwsgi.sock;
+        uwsgi_pass             easy_read;
+        uwsgi_param            X-Forwarded-For           $proxy_add_x_forwarded_for;
+        uwsgi_param            X-Forwarded-Proto         $http_x_forwarded_proto;
 
         proxy_set_header       Host                      $host;
         proxy_set_header       X-Real-IP                 $remote_addr;
@@ -50,7 +58,6 @@ server {
         proxy_set_header       Connection                $connection_upgrade;
 
         add_header             X-Content-Type-Options    "nosniff";
-        add_header             Cache-Control             "max-age=30, must-revalidate, s-maxage=90";
         add_header             x-phe-media-type          "PHE-COVID19.v1";
         add_header             strict-transport-security "max-age=31536000; includeSubDomains; preload";
         add_header             Content-Language          "en-GB";
@@ -63,113 +70,6 @@ server {
         proxy_read_timeout     86400;
 
         limit_except GET HEAD OPTIONS {
-            deny    all;
-        }
-
-    }
-
-    location ~ ^/(favicon.+)$ {
-
-        root                   /app/static/icon;
-        autoindex              on;
-        gzip_static            off;
-        sendfile               on;
-        tcp_nopush             on;
-        sendfile_max_chunk     1m;
-        tcp_nodelay            on;
-        try_files              $1 /$1 @app;
-
-        proxy_ignore_headers   X-Accel-Expires Expires Cache-Control;
-        proxy_cache_valid      any 86400s;
-        proxy_cache_lock       on;
-        proxy_cache_use_stale  updating;
-
-        access_log             off;
-        log_not_found          off;
-
-        limit_except GET HEAD {
-            deny    all;
-        }
-
-    }
-
-    location ~ ^/assets/images/(.+)$ {
-
-        root                   /app/static/images;
-        autoindex              on;
-        gzip_static            off;
-        sendfile               on;
-        tcp_nopush             on;
-        sendfile_max_chunk     1m;
-        tcp_nodelay            on;
-        try_files              $1 /$1 @app;
-
-        proxy_ignore_headers   X-Accel-Expires Expires Cache-Control;
-        proxy_cache_valid      any 86400s;
-        proxy_cache_lock       on;
-        proxy_cache_use_stale  updating;
-
-        add_header             Cache-Control             "s-maxage=604800, max-age=86400, stale-while-revalidate=300";
-        add_header             x-phe-media-type          "PHE-COVID19.v1";
-        add_header             strict-transport-security "max-age=31536000; includeSubDomains; preload";
-
-        limit_except GET HEAD {
-            deny    all;
-        }
-
-    }
-
-    location ~ ^/assets/govuk-frontend/(.+woff2?)$ {
-
-        root                   /app/static/govuk-frontend;
-        autoindex              on;
-        gzip_static            off;
-        sendfile               on;
-        tcp_nopush             on;
-        sendfile_max_chunk     1m;
-        tcp_nodelay            on;
-        try_files              $1 /$1 @app;
-
-        proxy_ignore_headers   X-Accel-Expires Expires Cache-Control;
-        proxy_cache_valid      any 86400s;
-        proxy_cache_lock       on;
-        proxy_cache_use_stale  updating;
-
-        add_header             Cache-Control                   "immutable, s-maxage=604800, max-age=604800";
-        add_header             x-phe-media-type                "PHE-COVID19.v1";
-        add_header             strict-transport-security       "max-age=31536000; includeSubDomains; preload";
-        add_header             Access-Control-Allow-Origin     "*";
-        add_header             Access-Control-Allow-Methods    "GET, HEAD";
-        add_header             Access-Control-Allow-Headers    "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range";
-        add_header             Access-Control-Expose-Headers   "Content-Length,Content-Range";
-
-        limit_except GET HEAD {
-            deny    all;
-        }
-
-    }
-
-    location ~ ^/assets/govuk-frontend/(.+)$ {
-
-        root                   /app/static/govuk-frontend;
-        autoindex              on;
-        gzip_static            off;
-        sendfile               on;
-        tcp_nopush             on;
-        sendfile_max_chunk     1m;
-        tcp_nodelay            on;
-        try_files              $1 /$1 @app;
-
-        proxy_ignore_headers   X-Accel-Expires Expires Cache-Control;
-        proxy_cache_valid      any 86400s;
-        proxy_cache_lock       on;
-        proxy_cache_use_stale  updating;
-
-        add_header             Cache-Control             "immutable, s-maxage=604800, max-age=604800";
-        add_header             x-phe-media-type          "PHE-COVID19.v1";
-        add_header             strict-transport-security "max-age=31536000; includeSubDomains; preload";
-
-        limit_except GET HEAD {
             deny    all;
         }
 
@@ -224,6 +124,30 @@ server {
         limit_except GET HEAD {
             deny    all;
         }
+
+    }
+
+    location /assets {
+
+        proxy_pass             https://coronavirus.data.gov.uk/assets/;
+
+    }
+
+    location = /sitemap.xml {
+
+        proxy_pass             https://coronavirus.data.gov.uk/public/assets/supplements/sitemap.xml;
+
+    }
+
+    location ~ (manifest\.json)$ {
+
+        proxy_pass             https://coronavirus.data.gov.uk;
+
+    }
+
+    location ~ ^(/favicon.+)$ {
+
+        proxy_pass             https://coronavirus.data.gov.uk;
 
     }
 
