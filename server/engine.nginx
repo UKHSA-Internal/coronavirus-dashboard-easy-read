@@ -20,7 +20,7 @@ server {
     gzip               off;
     server_tokens      off;
     listen             5000;
-    server_name        coronavirus.data.gov.uk;
+    server_name        ${URL_LOCATION};
     keepalive_timeout  65s;
     resolver_timeout   30s;
     uwsgi_read_timeout 60s;
@@ -129,25 +129,25 @@ server {
 
     location /assets {
 
-        proxy_pass             https://coronavirus.data.gov.uk/assets/;
+        proxy_pass             https://${URL_LOCATION}/assets/;
 
     }
 
     location = /sitemap.xml {
 
-        proxy_pass             https://coronavirus.data.gov.uk/public/assets/supplements/sitemap.xml;
+        proxy_pass             https://${URL_LOCATION}/public/assets/supplements/sitemap.xml;
 
     }
 
     location ~ (manifest\.json)$ {
 
-        proxy_pass             https://coronavirus.data.gov.uk;
+        proxy_pass             https://${URL_LOCATION};
 
     }
 
     location ~ ^(/favicon.+)$ {
 
-        proxy_pass             https://coronavirus.data.gov.uk;
+        proxy_pass             https://${URL_LOCATION};
 
     }
 
