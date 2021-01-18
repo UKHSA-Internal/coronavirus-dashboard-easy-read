@@ -7,10 +7,10 @@ services:
     volumes:
       - ./app/:/app/app/
       - ./app/static/dist/easy_read.css:/app/static/easy_read.css
+      - ./prestart.sh:/app/prestart.sh
       - ./app/static/images:/app/static/images
       - ./app/static/govuk-frontend:/app/static/govuk-frontend
       - ./server/upload.nginx:/etc/nginx/conf.d/upload.conf
-      - ./server/engine.nginx:/etc/nginx/conf.d/engine.conf
     ports:
       - 5000:5000
     env_file:
