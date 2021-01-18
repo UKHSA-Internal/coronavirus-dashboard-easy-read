@@ -6,7 +6,7 @@ services:
     restart: always
     volumes:
       - ./app/:/app/app/
-      - ./app/static/dist/application.css:/app/static/easy_read/application.css
+      - ./app/static/dist/easy_read.css:/app/static/easy_read.css
       - ./app/static/images:/app/static/images
       - ./app/static/govuk-frontend:/app/static/govuk-frontend
       - ./server/upload.nginx:/etc/nginx/conf.d/upload.conf
