@@ -152,6 +152,12 @@ def trim_area_name(area_name):
 
 
 @app.template_filter()
+def escape_name(area_name):
+    area_name = area_name.replace("&", r"\&")
+    return area_name
+
+
+@app.template_filter()
 def pluralise(number, singular, plural, null=str()):
     if abs(number) > 1:
         return plural
