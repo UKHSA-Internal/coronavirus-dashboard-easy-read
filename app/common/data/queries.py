@@ -73,6 +73,32 @@ def process_dates(date: str) -> dtypes.ProcessedDateType:
     return result
 
 
+@cache_client.memoize(60 * 60 * 12)
+def get_postcode_areas_from_db(area_type, area_code):
+    query = queries.PostcodeAreaCodeLookup.substitute(area_type=area_type)
+
+    params = [
+        {"name": "@areaCode", "value": area_code}
+    ]
+
+    try:
+        result = lookup_db.query(query, params=params)
+
+        if not result:
+            raise InvalidArea(f"{area_type} - {area_code}")
+
+        return result.pop()
+
+    except AzureError as err:
+        app.logger.exception(err, extra={
+            "custom_dimensions": {
+                "query": query,
+                "query_params": dumps(params)
+            }
+        })
+        raise err
+
+
 @lru_cache(maxsize=256)
 def get_area_data(area_type, area_code) -> dtypes.DBArea:
     query_area_type = AreaTypeTable.get(area_type.lower())
@@ -87,32 +113,7 @@ def get_area_data(area_type, area_code) -> dtypes.DBArea:
     if not re.fullmatch(r"^[A-Z0-9]{6,12}$", area_code):
         raise InvalidArea(area_code)
 
-    @cache_client.memoize(60 * 60 * 12)
-    def get_postcode_areas_from_db():
-        query = queries.PostcodeAreaCodeLookup.substitute(area_type=query_area_type)
-
-        params = [
-            {"name": "@areaCode", "value": area_code}
-        ]
-
-        try:
-            result = lookup_db.query(query, params=params)
-
-            if not result:
-                raise InvalidArea(f"{area_type} - {area_code}")
-
-            return result.pop()
-
-        except AzureError as err:
-            app.logger.exception(err, extra={
-                "custom_dimensions": {
-                    "query": query,
-                    "query_params": dumps(params)
-                }
-            })
-            raise err
-
-    return get_postcode_areas_from_db()
+    return get_postcode_areas_from_db(query_area_type, area_code)
 
 
 @cache_client.memoize(60 * 60 * 6)
