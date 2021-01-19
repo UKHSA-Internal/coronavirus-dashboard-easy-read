@@ -32,7 +32,7 @@ WAIT_DURATION = 10  # seconds
 
 
 def name2url(name):
-    return re.sub(r"['.\s_&,\-()]", "-", name)
+    return re.sub(r"['.\s&,]", "-", name)
 
 
 def generate_pdf(area_type: str, area_code: str) -> bytes:
