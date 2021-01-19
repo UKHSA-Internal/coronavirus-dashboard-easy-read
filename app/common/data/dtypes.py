@@ -13,7 +13,7 @@ Contributors:  Pouria Hadjibagheri
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Python:
 from datetime import datetime
-from typing import Dict, Union, List
+from typing import Dict, Union, List, TypedDict
 
 # 3rd party:
 
@@ -39,3 +39,23 @@ DatabaseRowType = Union[
 ]
 
 DatabaseOutputType = List[DatabaseRowType]
+
+
+# Area query response
+SingleAreaValue = Union[str, None]
+
+
+class DBArea(TypedDict):
+    nation: str
+    nationName: str
+    nhsTrust: SingleAreaValue
+    nhsTrustName: SingleAreaValue
+    nhsRegion: str
+    nhsRegionName: str
+    utla: str
+    utlaName: str
+    ltla: str
+    ltlaName: str
+    msoa: SingleAreaValue
+    msoaName: SingleAreaValue
+
