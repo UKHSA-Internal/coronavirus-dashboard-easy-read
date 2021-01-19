@@ -28,7 +28,7 @@ PDF_TYPE = "application/pdf"
 PDF_CACHE = "public, max-age=86400, s-maxage=604800"
 CONTAINER = "ondemand"
 LOCK_DURATION = 15  # seconds
-WAIT_DURATION = 5  # seconds
+WAIT_DURATION = 10  # seconds
 
 
 def name2url(name):
