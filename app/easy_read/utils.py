@@ -5,7 +5,7 @@
 # Python:
 import re
 from operator import itemgetter
-from typing import List, Dict, Union
+from typing import Union
 from functools import lru_cache
 
 # 3rd party:

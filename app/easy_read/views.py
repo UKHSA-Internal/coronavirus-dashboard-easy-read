@@ -5,7 +5,6 @@
 # Python:
 from functools import wraps
 from typing import Union, TypedDict, Dict
-from os import getenv
 
 # 3rd party:
 from flask import render_template, make_response, request, current_app as app, redirect
