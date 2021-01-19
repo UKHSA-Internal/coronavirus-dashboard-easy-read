@@ -74,7 +74,7 @@ def process_dates(date: str) -> dtypes.ProcessedDateType:
 
 
 @lru_cache(maxsize=256)
-def get_area_data(area_type, area_code) -> Dict[str, str]:
+def get_area_data(area_type, area_code) -> dtypes.DBArea:
     query_area_type = AreaTypeTable.get(area_type.lower())
 
     if query_area_type is None:
