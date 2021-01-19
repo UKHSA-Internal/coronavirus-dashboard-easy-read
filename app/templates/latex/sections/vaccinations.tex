@@ -1,6 +1,6 @@
 {% set latest = vaccinations_first.latest %}
 
-\section{Vaccinations{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %} }
+\section{Vaccinations{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | escape_name }}{% endif %} }
 
 Vaccines are currently given in 2 doses, at least 21 days apart.
 

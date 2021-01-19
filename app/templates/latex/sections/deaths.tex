@@ -1,7 +1,7 @@
 {% set latest = deaths.latest %}
 {% set lastWeek = deaths.previous %}
 
-\section{Deaths{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %}}
+\section{Deaths{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | escape_name }}{% endif %}}
 
 There {{ latest.value | pluralise("was", "were", "were") }}
 {\bf{{ latest.value | format_number }}} death{{ latest.value | pluralise("", "s", "s") }}

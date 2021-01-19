@@ -1,7 +1,7 @@
 {% set latest = cases.latest %}
 {% set lastWeek = cases.previous %}
 
-\section{Cases{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %} }
+\section{Cases{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | escape_name }}{% endif %} }
 
 A confirmed case is someone who has tested positive for coronavirus.
 

@@ -1,7 +1,7 @@
 {% set latest = testing.latest %}
 {% set lastWeek = testing.previous %}
 
-\section{Testing{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %} }
+\section{Testing{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | escape_name }}{% endif %} }
 
 Testing is where we do a test to see who has coronavirus.
 Some people are tested more than once.

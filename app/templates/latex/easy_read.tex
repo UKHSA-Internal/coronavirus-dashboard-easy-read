@@ -1,11 +1,3 @@
-{% if area_name != "United Kingdom" %}
-    {% set testingAreaName = "in " + testing.latest.areaName %}
-    {% set casesAreaName = "in " + cases.latest.areaName %}
-    {% set admissionsAreaName = "in " + admissions.latest.areaName %}
-    {% set vaccinationsAreaName = "in " + vaccinations_first.latest.areaName %}
-    {% set deathsAreaName = "in " + deaths.latest.areaName %}
-{% endif %}
-
 \documentclass[A4,12pt]{extarticle}
 \usepackage[a4paper, total={5.8in, 8in}, bmargin=1.5in, tmargin=1.5in]{geometry}
 \usepackage{fancyhdr}
@@ -36,11 +28,11 @@
         Easy read summary \\[-2mm]
         for \\[-5mm]%
     }
-    {\Large\textbf{ {{ area_name }} }}
+    {\Large\textbf{ {{ area_name | escape_name }} }}
 }
 \date{}
 
-\lhead{\footnotesize Coronavirus in the UK: Easy read document --- {{ area_name }} }
+\lhead{\footnotesize Coronavirus in the UK: Easy read document --- {{ area_name | escape_name }} }
 \rhead{\footnotesize\thepage}
 \fancyfoot[C]{\begin{minipage}{\textwidth}%
 {\footnotesize %

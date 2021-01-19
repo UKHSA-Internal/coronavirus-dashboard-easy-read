@@ -1,7 +1,7 @@
 {% set latest = admissions.latest %}
 {% set lastWeek = admissions.previous %}
 
-\section{Healthcare{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %} }
+\section{Healthcare{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | escape_name }}{% endif %} }
 
 Some people with coronavirus have to go into hospital.
 
