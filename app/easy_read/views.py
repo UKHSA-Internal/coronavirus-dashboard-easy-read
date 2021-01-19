@@ -98,7 +98,11 @@ def process_postcode_request(postcode) -> make_response:
     if area_name is None:
         area_type = "utla"
 
-    resp = redirect(f'/easy_read/{area_type}/{area.get(area_type)}', code=308)
+    host = request.headers.get("X-Forwarded-Host", "")
+    if host:
+        host = f"https://{host}"
+
+    resp = redirect(f'{host}/easy_read/{area_type}/{area.get(area_type)}', code=308)
 
     return make_response(resp)
 

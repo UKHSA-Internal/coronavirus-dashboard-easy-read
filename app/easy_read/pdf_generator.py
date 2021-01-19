@@ -9,7 +9,7 @@ from time import sleep
 import re
 
 # 3rd party:
-from flask import g, redirect, make_response
+from flask import g, redirect, make_response, request
 from latex import build_pdf
 
 # Internal: 
@@ -92,6 +92,10 @@ def create_and_redirect(area_type, area_code):
                         "Failed to obtained the file - lock was not released."
                     )
 
-    resp = redirect(f"/downloads/{CONTAINER}/{path}", code=303)
+    host = request.headers.get("X-Forwarded-Host", "")
+    if host:
+        host = f"https://{host}"
+
+    resp = redirect(f"{host}/downloads/{CONTAINER}/{path}", code=303)
 
     return make_response(resp)
