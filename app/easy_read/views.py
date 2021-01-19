@@ -89,20 +89,21 @@ def cache_header(max_age: int, **kwargs):
     return decorator
 
 
-# @cache_client.memoize(60 * 60 * 24)
-def process_postcode_request(postcode) -> make_response:
+@cache_client.memoize(60 * 60 * 24)
+def process_postcode_request(timestamp, postcode) -> make_response:
     area = get_area_data(AreaType.postcode, postcode)
     area_type = "msoa"
-    area_name = area.get(f"{area_type}Name")
+    area_name = area.get(f"msoaName")
 
     if area_name is None:
         area_type = "utla"
+        area_name = area.get("utlaName")
 
     host = request.headers.get("X-Forwarded-Host", "")
     if host:
         host = f"https://{host}"
 
-    resp = redirect(f'{host}/easy_read/{area_type}/{area.get(area_type)}', code=308)
+    resp = redirect(f'{host}/easy_read/{area_type}/{area_name}', code=308)
 
     return make_response(resp)
 
@@ -113,6 +114,7 @@ def create_response(timestamp: str, template: str, **data) -> make_response:
     return make_response(resp)
 
 
+@cache_client.memoize(60 * 60)
 def from_database(timestamp: str, **area):
     data = {
         key: get_easy_read_data(timestamp, value, **area)
@@ -122,16 +124,14 @@ def from_database(timestamp: str, **area):
     return data
 
 
-@cache_client.memoize(60 * 60)
 def local_easy_read(timestamp: str, area_type: str, area_code: str,
                     template: str = "html/easy_read.html") -> render_template:
     area = get_area_data(area_type, area_code)
     area_type = area_type.lower()
-    area_name = area.get(f"{area_type}Name")
     area_code = area.get(area_type)
 
     if area_type == AreaType.msoa:
-        area_name += f", {area.get('utlaName')}"
+        area_name = f"{area.get('msoaName')}, {area.get('utlaName')}"
     else:
         area_name = area.get('utlaName')
 
@@ -155,7 +155,7 @@ def easy_read(timestamp: str, postcode: Union[None, str],
     area_name = "United Kingdom"
 
     if postcode is not None:
-        return process_postcode_request(postcode)
+        return process_postcode_request(timestamp, postcode)
 
     data = from_database(timestamp)
 
