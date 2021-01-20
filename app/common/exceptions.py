@@ -3,6 +3,7 @@
 # Imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Python:
+from http import HTTPStatus
 
 # 3rd party:
 from werkzeug.exceptions import HTTPException
@@ -27,19 +28,26 @@ class HandledException(object):
         super().__init__(*args, **kwargs)
 
     def get_body(self, environ=None):
-        return render_template(self.template, **self.template_kws)
+        code = getattr(self, "code", 500)
+
+        return render_template(
+            self.template,
+            **self.template_kws,
+            response_code=code,
+            response_message=HTTPStatus(code).phrase
+        )
 
 
 class InvalidPostcode(HandledException, HTTPException):
     code = 400
     message_template = 'Invalid postcode: "{postcode}"'
-    template = "main.html"
+    template = "html/errors/40x.html"
 
     def __init__(self, postcode):
         self.postcode = postcode
         self.template_kws = {
             'invalid_postcode': True,
-            'message': self.message
+            'error_message': self.message
         }
         super().__init__(description=self.message)
 
@@ -49,17 +57,17 @@ class InvalidPostcode(HandledException, HTTPException):
 
 
 class InvalidArea(HandledException, HTTPException):
-    code = 400
-    message_template = 'Invalid area: "{area}"'
-    template = "main.html"
+    code = 404
+    message_template = 'Invalid {area_name}: "{area}"'
+    template = "html/errors/40x.html"
 
-    def __init__(self, area):
+    def __init__(self, area, area_name="area"):
         self.area = area
         self.template_kws = {
             'invalid_postcode': True,
-            'message': self.message
+            'error_message': self.message
         }
-        super().__init__(description=self.message)
+        super().__init__(area_name=area_name, description=self.message)
 
     @property
     def message(self):
