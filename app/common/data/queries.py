@@ -4,7 +4,6 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Python:
 from datetime import datetime
-from typing import Dict
 from functools import lru_cache
 from json import dumps
 from operator import itemgetter
@@ -19,7 +18,7 @@ from azure.core.exceptions import AzureError
 from . import query_templates as queries
 from . import dtypes
 from ..caching import cache_client
-from ..exceptions import InvalidArea
+from ..exceptions import InvalidArea, InvalidPostcode
 from ...database import CosmosDB, Collection
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -110,8 +109,8 @@ def get_area_data(area_type, area_code) -> dtypes.DBArea:
         area_code = area_code.replace(" ", "")
 
     area_code = area_code.upper()
-    if not re.fullmatch(r"^[A-Z0-9]{6,12}$", area_code):
-        raise InvalidArea(area_code)
+    if not re.fullmatch(r"^[A-Z0-9]{4,12}$", area_code):
+        raise InvalidPostcode(area_code)
 
     return get_postcode_areas_from_db(query_area_type, area_code)
 
