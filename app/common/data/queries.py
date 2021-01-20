@@ -123,12 +123,14 @@ def get_easy_read_data(timestamp, metric_data, **area):
     area_type = AreaType.uk
     area_code = "K02000001"  # UK code
 
+    healthcare_metrics = {"admissions", "in_patients", "ventilators"}
+
     if len(area):
         area_type = metric_data["postcode_destination"]
 
         if category == "vaccinations":
             area_type = AreaType.nation
-        elif category in ["admissions", "in_patients", "ventilators"] and area[AreaType.nation][0].upper() != "E":
+        elif category in healthcare_metrics and area[AreaType.nation][0].upper() != "E":
             area_type = AreaType.nation
         elif category == "deaths" and area[AreaType.nation][0].upper() == "W":
             area_type = AreaType.nation
