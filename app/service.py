@@ -193,7 +193,13 @@ def handle_404(err):
         return err
 
     app.logger.info(f"404 - Not found", extra={'custom_dimensions': {"url": request.url}})
-    return render_template("html/errors/404.html"), 404
+
+    context = dict(
+        response_code=404,
+        response_message="Not found"
+    )
+
+    return render_template("html/errors/40x.html", **context), 404
 
 
 @app.errorhandler(Exception)
