@@ -53,12 +53,12 @@ metrics: MetricsType = {
     },
     'in_patients': {
         "metric": 'hospitalCases',
-        "postcode_destination": "nhsRegion",
+        "postcode_destination": "nhsTrust",
         "category": "in_patients"
     },
     'ventilators': {
         "metric": 'covidOccupiedMVBeds',
-        "postcode_destination": "nhsRegion",
+        "postcode_destination": "nhsTrust",
         "category": "ventilators"
     },
     'vaccinations_first': {
