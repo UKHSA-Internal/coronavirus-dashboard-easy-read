@@ -293,10 +293,11 @@ def prepare_context():
 
 @app.after_request
 def prepare_response(resp: Response):
-    last_modified = datetime.strptime(
-        g.timestamp[:PYTHON_TIMESTAMP_LEN] + "Z",
-        "%Y-%m-%dT%H:%M:%S.%fZ"
-    )
+    last_modified = datetime.now()
+    # (
+    #     g.timestamp[:PYTHON_TIMESTAMP_LEN] + "Z",
+    #     "%Y-%m-%dT%H:%M:%S.%fZ"
+    # )
 
     resp.last_modified = last_modified
     resp.expires = datetime.now() + timedelta(minutes=1, seconds=30)
