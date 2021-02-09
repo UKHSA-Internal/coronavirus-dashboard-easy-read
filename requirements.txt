@@ -1,4 +1,4 @@
-azure-core==1.10.0
+azure-core==1.11.0
 azure-common==1.1.26
 azure-nspkg==3.0.2
 azure-storage-common==2.1.0
