@@ -9,7 +9,7 @@
 	<div class="print-me govuk-body govuk-grid-row">
 
 		<a class="govuk-button govuk-!-margin-bottom-0"
-		   href="/easy_read/download{% if area_name != "United Kingdom" %}?postcode={{ postcode }}{% endif %}">
+		   href="/easy_read/download{% if area_name != "United Kingdom" %}/{{ area_type }}/{{ area_code }}?postcode={{ postcode }}{% endif %}">
 			Download PDF
 		</a>
 	</div>
