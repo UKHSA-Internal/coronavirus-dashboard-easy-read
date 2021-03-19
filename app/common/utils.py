@@ -23,7 +23,7 @@ from ..storage import AsyncStorageClient
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-CLOUD_ROLE_NAME = getenv("WEBSITE_SITE_NAME", "landing-page")
+CLOUD_ROLE_NAME = getenv("WEBSITE_SITE_NAME", "easyread-page")
 
 get_value = itemgetter("value")
 get_area_type = itemgetter("areaType")
