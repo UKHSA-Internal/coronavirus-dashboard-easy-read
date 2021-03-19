@@ -59,6 +59,7 @@ routes = [
     Route('/easy_read', endpoint=base_router, methods=["GET", "HEAD"]),
     Route('/easy_read/download', endpoint=get_pdf, methods=["GET", "HEAD"]),
     Route('/easy_read/{area_type:str}/{area_code:str}', endpoint=base_router, methods=["GET", "HEAD"]),
+    Route('/easy_read/download/{area_type:str}/{area_code:str}', endpoint=get_pdf, methods=["GET", "HEAD"]),
     Route('/healthcheck', endpoint=run_healthcheck, methods=["GET", "HEAD"]),
     Route('/easy_read/healthcheck', endpoint=run_healthcheck, methods=["GET", "HEAD"]),
     Mount('/easy_read/assets', StaticFiles(directory="static"), name="static")
