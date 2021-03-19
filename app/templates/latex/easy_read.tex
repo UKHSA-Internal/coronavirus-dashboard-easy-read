@@ -1,3 +1,4 @@
+{%- set area_name = data | smallest_area_name -%}
 \documentclass[A4,12pt]{extarticle}
 \usepackage[a4paper, total={5.8in, 8in}, bmargin=1.5in, tmargin=1.5in]{geometry}
 \usepackage{fancyhdr}
@@ -28,11 +29,11 @@
         Easy read summary \\[-2mm]
         for \\[-5mm]%
     }
-    {\Large\textbf{ {{ area_name | escape_name }} }}
+    {\Large\textbf{ {{ area_name | trim_area_name }} }}
 }
 \date{}
 
-\lhead{\footnotesize Coronavirus in the UK: Easy read document --- {{ area_name | escape_name }} }
+\lhead{\footnotesize Coronavirus in the UK: Easy read document --- {{ area_name | trim_area_name }} }
 \rhead{\footnotesize\thepage}
 \fancyfoot[C]{\begin{minipage}{\textwidth}%
 {\footnotesize %

@@ -1,19 +1,21 @@
-{% set latest = testing.latest %}
-{% set lastWeek = testing.previous %}
+{% set latest = ("newVirusTests" | get_data(data)) %}
+{% set change = ("newVirusTestsChange" | get_data(data)) %}
+{% set changePercentage = ("newVirusTestsChangePercentage" | get_data(data)) %}
+{% set rollingSum = ("newVirusTestsRollingSum" | get_data(data)) %}
 
-\section{Testing{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | escape_name }}{% endif %} }
+\section{Testing{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | trim_area_name }}{% endif %} }
 
 Testing is where we do a test to see who has coronavirus.
 Some people are tested more than once.
 
-There {{ latest.value | pluralise("was", "were", "were") }} {\bf{{ latest.value | format_number }}}
-test{{ latest.value | pluralise("", "s", "s") }} reported on {{ latest.formatted }}.
-This shows {{ latest.change | comparison_verb("an increase", "a decrease", "no change" ) }}
-{% if latest.change != 0 -%}
-of {\bf{{ latest.percentage | format_number }}\%}
+There {{ latest.raw | pluralise("was", "were", "were") }} {\bf {{ latest.value }}}
+test{{ latest.raw | pluralise("", "s", "s") }} reported on {{ latest.date }}. This
+shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
+{% if change.raw != 0 -%}
+of {\bf {{ changePercentage.value }}\%}
 {%- endif %}
 compared to the previous 7 days.
 
 
-Between {{ lastWeek.formatted }} and {{ latest.formatted }}, there have
-been {\bf{{ latest.rollingSum | format_number }}} tests.
+Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }}, there have
+been {\bf {{ rollingSum.value }}} tests.

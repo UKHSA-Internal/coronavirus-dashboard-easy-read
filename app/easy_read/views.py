@@ -7,12 +7,12 @@ from functools import wraps
 from typing import Union, TypedDict, Dict
 
 # 3rd party:
-from flask import render_template, make_response, request, current_app as app, redirect
+# from flask import render_template, make_response, request, current_app as app, redirect
 
 # Internal:
-from ..common.caching import cache_client
-from ..common.data.queries import get_easy_read_data, get_area_data, AreaType
-
+# from ..common.caching import cache_client
+from app.common.data.queries import get_easy_read_data, get_area_data, AreaType
+from app.template_processor import render_template
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 __all__ = [
@@ -74,22 +74,22 @@ metrics: MetricsType = {
 }
 
 
-def cache_header(max_age: int, **kwargs):
-    def decorator(view):
-        cacher = cache_client.memoize(max_age, **kwargs)(view)
+# def cache_header(max_age: int, **kwargs):
+#     def decorator(view):
+#         cacher = cache_client.memoize(max_age, **kwargs)(view)
+#
+#         @wraps(cacher)
+#         def wrapper(*args, **kws):
+#             resp = cacher(*args, **kws)
+#             return resp.make_conditional(request)
+#
+#         return wrapper
+#
+#     return decorator
 
-        @wraps(cacher)
-        def wrapper(*args, **kws):
-            resp = cacher(*args, **kws)
-            return resp.make_conditional(request)
 
-        return wrapper
-
-    return decorator
-
-
-@cache_client.memoize(60 * 60 * 24)
-def process_postcode_request(postcode) -> make_response:
+# @cache_client.memoize(60 * 60 * 24)
+def process_postcode_request(postcode):
     area = get_area_data(AreaType.postcode, postcode)
 
     area_type = AreaType.msoa
@@ -109,13 +109,13 @@ def process_postcode_request(postcode) -> make_response:
     return make_response(resp)
 
 
-@cache_header(60 * 60)
-def create_response(timestamp: str, template: str, **data) -> make_response:
+# @cache_header(60 * 60)
+def create_response(timestamp: str, template: str, **data):
     resp = render_template(template, release_timestamp=timestamp, **data)
     return make_response(resp)
 
 
-@cache_client.memoize(60 * 60)
+# @cache_client.memoize(60 * 60)
 def from_database(timestamp: str, **area):
     data = {
         key: get_easy_read_data(timestamp, value, **area)
@@ -125,48 +125,39 @@ def from_database(timestamp: str, **area):
     return data
 
 
-def local_easy_read(timestamp: str, area_type: str, area_code: str,
-                    template: str = "html/easy_read.html") -> render_template:
-    area = get_area_data(area_type, area_code)
-    area_type = area_type.lower()
-    area_code = area.get(area_type)
-    msoa_name = area.get(f'{AreaType.msoa}Name')
-
-    if msoa_name is not None:
-        area_name = f"{msoa_name}, {area.get('utlaName')}"
-    else:
-        area_name = area.get('utlaName')
-
+def local_easy_read(request, timestamp: str, area_type: str, area_code: str,
+                    template: str = "html/easy_read.html"):
+    # area = get_area_data(area_type, area_code)
     data = from_database(timestamp, **area)
 
-    resp = create_response(
-        timestamp,
+    resp = render_template(
+        request,
         template,
-        area_name=area_name,
-        area_code=area_code,
-        area_type=area_type,
-        **data,
+        render=False,
+        context=dict(
+            timestamp=timestamp,
+            data=data
+        )
     )
 
     return resp
 
 
-def easy_read(timestamp: str, postcode: Union[None, str],
-              template: str = "html/easy_read.html") -> render_template:
-
-    area_name = "United Kingdom"
-
+def easy_read(request, timestamp: str, postcode: Union[None, str],
+              template: str = "html/easy_read.html"):
     if postcode is not None:
         return process_postcode_request(postcode)
 
     data = from_database(timestamp)
 
-    resp = create_response(
-        timestamp,
+    resp = render_template(
+        request,
         template,
-        area_type=AreaType.uk,
-        area_name=area_name,
-        **data
+        render=False,
+        context=dict(
+            timestamp=timestamp,
+            data=data
+        )
     )
 
     return resp

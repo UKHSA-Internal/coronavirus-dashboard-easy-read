@@ -6,8 +6,8 @@
 from http import HTTPStatus
 
 # 3rd party:
-from werkzeug.exceptions import HTTPException
-from flask import render_template, Response
+# from werkzeug.exceptions import HTTPException
+# from flask import render_template, Response
 
 # Internal: 
 
@@ -38,7 +38,7 @@ class HandledException(object):
         )
 
 
-class InvalidPostcode(HandledException, HTTPException):
+class InvalidPostcode(HandledException):
     code = 400
     message_template = 'Invalid postcode: "{postcode}"'
     template = "html/errors/40x.html"
@@ -56,7 +56,7 @@ class InvalidPostcode(HandledException, HTTPException):
         return self.message_template.format(postcode=self.postcode)
 
 
-class InvalidArea(HandledException, HTTPException):
+class InvalidArea(HandledException):
     code = 404
     message_template = 'Invalid {area_name}: "{area}"'
     template = "html/errors/40x.html"

@@ -1,5 +1,7 @@
-{% set latest = cases.latest %}
-{% set lastWeek = cases.previous %}
+{% set latest = ("newCasesByPublishDate" | get_data(data)) %}
+{% set change = ("newCasesByPublishDateChange" | get_data(data)) %}
+{% set changePercentage = ("newCasesByPublishDateChangePercentage" | get_data(data)) %}
+{% set rollingSum = ("newCasesByPublishDateRollingSum" | get_data(data)) %}
 
 <h3 id="cases">Cases{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %}</h3>
 <p>
@@ -7,17 +9,16 @@
 </p>
 
 <p>
-	<b>{{ latest.value | format_number }}</b> new {{ latest.value | pluralise("person", "people") }} had
+	<b>{{ latest.value }}</b> new {{ latest.raw | pluralise("person", "people") }} had
 	a confirmed positive test result reported on {{ latest.formatted }}.
 </p>
 
 <p>
-	Between {{ lastWeek.formatted }} and {{ latest.formatted }},
-	<b>{{ latest.rollingSum | format_number }}</b> people had a confirmed positive
-	test result.
-	This shows {{ latest.change | comparison_verb("an increase", "a decrease", "no change" ) }}
-	{% if latest.change != 0 -%}
-		of <b>{{ latest.percentage | format_number }}%</b>
+	Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }},
+	<b>{{ rollingSum.value }}</b> people had a confirmed positive test result.
+	This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
+	{% if change.raw != 0 -%}
+		of <b>{{ changePercentage.value }}%</b>
 	{%- endif %}
 	compared to the previous 7 days.
 </p>

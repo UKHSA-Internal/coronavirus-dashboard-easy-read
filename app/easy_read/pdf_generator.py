@@ -5,17 +5,24 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Python:
 from os import getenv
-from time import sleep
+from typing import Union
+from http import HTTPStatus
 import re
+from asyncio import sleep
 
 # 3rd party:
-from flask import g, redirect, make_response, request
+# from flask import g, redirect, make_response, request
 from latex import build_pdf
+from starlette.responses import RedirectResponse
 
 # Internal: 
 from .views import easy_read, local_easy_read
-from ..common.data.queries import get_area_data, AreaType
-from ..storage import StorageClient
+from app.common.data.queries import get_area_data, AreaType
+from app.storage import AsyncStorageClient
+from app.common.utils import get_release_timestamp
+from app.landing.views import get_home_page
+from app.postcode.views import postcode_page
+from app.template_processor.template import smallest_area_name, render_template
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -35,35 +42,53 @@ def name2url(name):
     return re.sub(r"['.\s&,]", "-", name)
 
 
-def generate_pdf(area_type: str, area_code: str) -> bytes:
+async def generate_pdf(request, data, area_type: str, timestamp: str) -> bytes:
     if area_type is None:
-        resp = easy_read(g.timestamp, None, template="latex/easy_read.tex")
-    else:
-        resp = local_easy_read(
-            g.timestamp,
-            area_type,
-            area_code,
-            template="latex/easy_read.tex"
+        resp = await render_template(
+            request,
+            template_name="latex/easy_read.tex",
+            render=False,
+            context=dict(
+                timestamp=timestamp,
+                data=data
+            )
         )
 
-    latex = str.join("", [item.decode() for item in resp.response])
+        # resp = easy_read(request, timestamp, None, template="latex/easy_read.tex")
+    else:
+        resp = await render_template(
+            request,
+            template_name="latex/easy_read.tex",
+            render=False,
+            context=dict(
+                timestamp=timestamp,
+                data=data
+            )
+        )
 
-    pdf_raw = build_pdf(latex)
+    # latex = str.join("", [item.decode() for item in resp])
+    print(resp)
+    pdf_raw = build_pdf(resp)
 
     return pdf_raw.data
 
 
-def create_and_redirect(area_type, area_code):
-    area_name = "United Kingdom"
+async def create_and_redirect(request):
+    area_type = request.path_params.get("area_type", "overview")  # type: str
+    area_code = request.path_params.get("area_code", None)  # type: Union[str, None]
 
-    if area_type is not None:
-        area = get_area_data(area_type, area_code)
-        area_name = area.get(f"{area_type.lower()}Name")
+    timestamp = await get_release_timestamp()
 
-    date = g.timestamp.split("T")[0]
+    get_data = get_home_page
+    if area_code is not None:
+        get_data = postcode_page
+
+    data = await get_data(request, timestamp, render=False)
+    date = timestamp.split("T")[0]
+    area_name = smallest_area_name(data)
 
     filename = f"ER_{name2url(area_name)}_{date}.pdf"
-    path = f"easy_read/{date}/{area_type or AreaType.uk}/{filename}"
+    path = f"easy_read/{date}/{area_type}/{filename}"
 
     storage_kws = dict(
         container=CONTAINER,
@@ -74,28 +99,39 @@ def create_and_redirect(area_type, area_code):
         content_disposition=f'inline; filename="ER_{area_name}_{date}.pdf"'
     )
 
-    with StorageClient(**storage_kws) as cli:
-        if not cli.exists():
-            cli.upload(b"")
-            with cli.lock_file(LOCK_DURATION):
-                pdf = generate_pdf(area_type, area_code)
-                cli.upload(pdf)
-        else:
-            counter = 0
-
-            while cli.is_locked():
-                sleep(1)
-                counter += 1
-
-                if counter == WAIT_DURATION:
-                    raise RuntimeError(
-                        "Failed to obtained the file - lock was not released."
-                    )
-
     host = request.headers.get("X-Forwarded-Host", "")
     if host:
         host = f"https://{host}"
 
-    resp = redirect(f"{host}/downloads/{CONTAINER}/{path}", code=303)
+    resp = RedirectResponse(
+        url=f"{host}/downloads/{CONTAINER}/{path}",
+        status_code=HTTPStatus.SEE_OTHER.real
+    )
 
-    return make_response(resp)
+    async with AsyncStorageClient(**storage_kws) as cli:
+        try:
+            if not await cli.exists():
+                await cli.upload(b"")
+
+                async with cli.lock_file(LOCK_DURATION):
+                    pdf = await generate_pdf(request, data, area_type, timestamp)
+                    await cli.upload(pdf)
+
+                return resp
+
+            counter = 0
+            while await cli.exists() and counter < WAIT_DURATION:
+                if await cli.is_locked():
+                    await sleep(1)
+                    counter += 1
+                    continue
+
+                return resp
+
+            raise RuntimeError("Failed to obtained the file - lock was not released.")
+        except Exception as err:
+            # Remove the blob on exception - data may be incomplete.
+            if not isinstance(err, RuntimeError) and await cli.exists():
+                await cli.delete()
+            raise err
+

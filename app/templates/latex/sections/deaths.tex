@@ -1,18 +1,19 @@
-{% set latest = deaths.latest %}
-{% set lastWeek = deaths.previous %}
+{% set latest = ("newDeaths28DaysByPublishDate" | get_data(data)) %}
+{% set change = ("newDeaths28DaysByPublishDateChange" | get_data(data)) %}
+{% set changePercentage = ("newDeaths28DaysByPublishDateChangePercentage" | get_data(data)) %}
+{% set rollingSum = ("newDeaths28DaysByPublishDateRollingSum" | get_data(data)) %}
 
-\section{Deaths{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | escape_name }}{% endif %}}
+\section{Deaths{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | trim_area_name }}{% endif %}}
 
-There {{ latest.value | pluralise("was", "were", "were") }}
-{\bf{{ latest.value | format_number }}} death{{ latest.value | pluralise("", "s", "s") }}
-within 28 days of a positive test for coronavirus reported on {{ latest.formatted }}.
+There {{ latest.raw | pluralise("was", "were", "were") }}
+{\bf {{ latest.value }}} death{{ latest.raw | pluralise("", "s", "s") }}
+within 28 days of a positive test for coronavirus reported on {{ latest.date }}.
 
-
-Between {{ lastWeek.formatted }} and {{ latest.formatted }}, there have
-been {\bf{{ latest.rollingSum | format_number }}} deaths within 28 days of a positive coronavirus test.
-This shows {{ latest.change | comparison_verb("an increase", "a decrease", "no change" ) }}
-{%- if latest.change != 0 %}
-	of {\bf{{ latest.percentage | format_number }}\%}
+Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }}, there have
+been {\bf {{ rollingSum.value }}} deaths within 28 days of a positive coronavirus test.
+This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
+{%- if change.raw != 0 %}
+	of {\bf {{ changePercentage.value }}\%}
 {% endif -%}
 compared to the previous 7 days.
 

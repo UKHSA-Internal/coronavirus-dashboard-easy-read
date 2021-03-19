@@ -19,22 +19,23 @@ from typing import Dict
 from json import loads
 
 # 3rd party:
-from flask import current_app as app
+# from flask import current_app as app
 
 # Internal:
-from .caching import cache_client
+# from .caching import cache_client
+# from .data.queries import get_last_fortnight, change_by_metric
 from .data.variables import DestinationMetrics
-from ..storage import StorageClient
+from ..storage import StorageClient, AsyncStorageClient
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-CLOUD_ROLE_NAME = getenv("WEBSITE_SITE_NAME", "easy-read")
+CLOUD_ROLE_NAME = getenv("WEBSITE_SITE_NAME", "landing-page")
 
 get_value = itemgetter("value")
 get_area_type = itemgetter("areaType")
 
 
-@cache_client.memoize(60 * 60 * 12)
+# @cache_client.memoize(60 * 60 * 12)
 def get_og_image_names(latest_timestamp: str) -> list:
     ts_python_iso = latest_timestamp[:-2]
     ts = datetime.fromisoformat(ts_python_iso)
@@ -47,6 +48,48 @@ def get_og_image_names(latest_timestamp: str) -> list:
     og_names.insert(0, f"/downloads/og-images/og-summary_{date}.png")
 
     return og_names
+
+
+# def get_card_data(latest_timestamp: str, category: str, metric_data, graph=True):
+#     metric_name = DestinationMetrics[category]["metric"]
+#
+#     change = change_by_metric(latest_timestamp, category, postcode=None)
+#
+#     response = {
+#         "data": metric_data,
+#         "change": change,
+#         "latest_date": metric_data[0]["date"].strftime('%-d %B %Y')
+#     }
+#
+#     if graph:
+#         response["graph"] = plot_thumbnail(metric_data, change, metric_name)
+#
+#     return response
+
+
+# @cache_client.memoize(60 * 60 * 6)
+# def get_fortnight_data(latest_timestamp: str, area_name: str = "United Kingdom") -> Dict[str, dict]:
+#     result = dict()
+#
+#     for category, metadata in DestinationMetrics.items():
+#         metric_name = metadata['metric']
+#         metric_data = get_last_fortnight(latest_timestamp, area_name, category)
+#         result[metric_name] = get_card_data(latest_timestamp, category, metric_data)
+#
+#     return result
+
+
+# @cache_client.memoize(60 * 60 * 6)
+# def get_main_data(latest_timestamp: str):
+#     # ToDo: Integrate this with postcode data.
+#     data = get_fortnight_data(latest_timestamp)
+#
+#     cards = [
+#         {**item, **data[item['metric']], "data": data[item["metric"]]['data']}
+#         for item in DestinationMetrics.values()
+#     ]
+#
+#     return dict(cards=cards)
 
 
 def get_by_smallest_areatype(items, areatype_getter):
@@ -74,32 +117,19 @@ def get_by_smallest_areatype(items, areatype_getter):
     return result
 
 
-@cache_client.memoize(300)
-def get_notification_data(timestamp):
-    with StorageClient("publicdata", "assets/cms/changeLog.json") as cli:
-        data = cli.download().readall().decode()
-
-    return loads(data)
-
-
-def get_notification_content(latest_timestamp):
-    ts_python_iso = latest_timestamp[:-1]
-    ts = datetime.fromisoformat(ts_python_iso)
-    timestamp_date = ts.strftime("%Y-%m-%d")
-    data = get_notification_data(latest_timestamp)
-
-    for item in data["changeLog"]:
-        if item["displayBanner"] is True and item["date"] >= timestamp_date:
-            response = {
-                "type": item["type"],
-                "headline": item["headline"],
-                "relativeUrl": item["relativeUrl"]
-            }
-            return response
-
-    return None
-
-
 def add_cloud_role_name(envelope):
     envelope.tags['ai.cloud.role'] = CLOUD_ROLE_NAME
     return True
+
+
+async def get_release_timestamp():
+    latest_published_timestamp = {
+        "container": "pipeline",
+        "path": "info/latest_published"
+    }
+
+    async with AsyncStorageClient(**latest_published_timestamp) as client:
+        data = await client.download()
+        timestamp = await data.readall()
+
+    return timestamp.decode()

@@ -1,21 +1,20 @@
-{% set latest = cases.latest %}
-{% set lastWeek = cases.previous %}
+{% set latest = ("newCasesByPublishDate" | get_data(data)) %}
+{% set change = ("newCasesByPublishDateChange" | get_data(data)) %}
+{% set changePercentage = ("newCasesByPublishDateChangePercentage" | get_data(data)) %}
+{% set rollingSum = ("newCasesByPublishDateRollingSum" | get_data(data)) %}
 
-\section{Cases{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | escape_name }}{% endif %} }
+\section{Cases{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | trim_area_name }}{% endif %} }
 
 A confirmed case is someone who has tested positive for coronavirus.
 
-
-{\bf{{ latest.value | format_number }}} new {{ latest.value | pluralise("person", "people") }} had
+{\bf {{ latest.value }}} new {{ latest.raw | pluralise("person", "people") }} had
 a confirmed positive test result reported on {{ latest.formatted }}.
 
-
-Between {{ lastWeek.formatted }} and {{ latest.formatted }},
-{\bf{{ latest.rollingSum | format_number }}} people had a confirmed positive
-test result.
-This shows {{ latest.change | comparison_verb("an increase", "a decrease", "no change" ) }}
-{% if latest.change != 0 -%}
-    of {\bf{{ latest.percentage | format_number }}\%}
+Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }},
+{\bf {{ rollingSum.value }}} people had a confirmed positive test result.
+This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
+{% if change.raw != 0 -%}
+    of {\bf {{ changePercentage.value }}\%}
 {%- endif %}
 compared to the previous 7 days.
 
