@@ -64,6 +64,8 @@ COPY ./app/static/icon                 ./static/icon
 COPY ./app/static/govuk-frontend       ./static/govuk-frontend
 COPY ./app                             ./app
 
+COPY prestart.sh                       ./prestart.sh
+
 COPY ./entrypoint.py                    /entrypoint.py
 RUN chmod +x /entrypoint.py
 
