@@ -16,8 +16,9 @@ templates_dir = path.join(dir_name, "templates")
 class Settings:
     TESTING = getenv("IS_DEV", "0") == "1"
     DEBUG = getenv("IS_DEV", "0") == "1"
+    ENVIRONMENT = getenv("API_ENV")
     template_path = templates_dir
-    instrumentation_key = getenv("APPINSIGHTS_INSTRUMENTATIONKEY", "")
+    instrumentation_key = f'InstrumentationKey={getenv("APPINSIGHTS_INSTRUMENTATIONKEY", "")}'
     service_domain = getenv('URL_LOCATION', str())
     server_location = getenv('SERVER_LOCATION', "N/A")
     log_level = getenv("LOG_LEVEL", "INFO")
