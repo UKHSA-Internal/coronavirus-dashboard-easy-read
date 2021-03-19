@@ -56,7 +56,7 @@ routes = [
     Route('/easy_read/download/{area_type:str}/{area_code:str}', endpoint=get_pdf, methods=["GET", "HEAD"]),
     Route('/healthcheck', endpoint=run_healthcheck, methods=["GET", "HEAD"]),
     Route('/easy_read/healthcheck', endpoint=run_healthcheck, methods=["GET", "HEAD"]),
-    Mount('/assets', StaticFiles(directory="static"), name="static")
+    Mount('/easy_read/assets', StaticFiles(directory="static"), name="static")
 ]
 
 middleware = [
