@@ -5,17 +5,12 @@
 # Python:
 import re
 from operator import itemgetter
-from typing import List, Dict, Union
+from typing import Union
 from functools import lru_cache
 
 # 3rd party:
-# from flask import current_app as app
 
 # Internal:
-# from ..common.caching import cache_client
-# from ..common.data.queries import get_last_fortnight, change_by_metric
-# from ..common.visualisation import plot_thumbnail, get_colour
-from ..common.data.variables import DestinationMetrics
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

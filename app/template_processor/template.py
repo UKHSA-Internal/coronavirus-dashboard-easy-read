@@ -19,18 +19,18 @@ from pytz import timezone
 # Internal: 
 from ..config import Settings
 from .types import DataItem
-from ..common.data.variables import NationalAdjectives
 from ..common.utils import get_release_timestamp
-# from ..common.banner import get_banners
-# from ..common.whats_new import get_whats_new_banners
-from app.common.utils import get_og_image_names, add_cloud_role_name
+from app.common.utils import add_cloud_role_name
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 __all__ = [
     'template',
     'as_template_filter',
-    'render_template'
+    'render_template',
+    'smallest_area_name',
+    'smallest_area_code',
+    'smallest_area_type'
 ]
 
 
@@ -63,6 +63,14 @@ AreaTypeNames = {
 }
 
 
+NationalAdjectives = {
+    "England": "English",
+    "Wales": "Welsh",
+    "Scotland": "Scottish",
+    "Northern Ireland": "Northern Irish"
+}
+
+
 def as_template_filter(func):
     template.env.filters[func.__name__] = func
 
@@ -86,7 +94,7 @@ async def render_template(request, template_name: str, context: Optional[Dict[st
     template_context = dict(
         request=request,
         app_insight_token=Settings.instrumentation_key,
-        og_images=get_og_image_names(context["timestamp"]),
+        # og_images=get_og_image_names(context["timestamp"]),
         **context
     )
 

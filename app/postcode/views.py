@@ -15,14 +15,10 @@ from typing import Union, Any
 from pandas import DataFrame
 
 # Internal:
-from .types import AlertsType, QueryDataType, AlertLevel
+from .types import AlertsType, QueryDataType
 from .utils import get_validated_postcode
-from ..common.utils import get_release_timestamp
-from ..common.data.variables import DestinationMetrics, IsImproving, NationalAdjectives
 from ..database.postgres import Connection
-from ..config import Settings
 from ..template_processor import render_template
-from ..template_processor.types import DataItem
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -83,23 +79,6 @@ async def get_postcode_data(conn: Any, timestamp: str, postcode: str) -> DataFra
     return df
 
 
-def is_improving(metric: str, value: Union[float, int]) -> Union[bool, None]:
-    if value == 0:
-        return None
-
-    improving = IsImproving[metric](value)
-    if isinstance(improving, bool):
-        return improving
-
-    return None
-
-#
-# def get_area_data(df: DataFrame) -> DataFrame:
-#     small_areas = df.sort_values("rank").iloc[0]
-#
-#     return small_areas
-
-
 async def invalid_postcode_response(request, timestamp, raw_postcode):
     from ..landing.views import get_home_page
 
@@ -128,10 +107,7 @@ async def postcode_page(request, timestamp: str, render=True) -> Union[render_te
         "html/easy_read.html",
         context={
             "timestamp": timestamp,
-            "cards": DestinationMetrics,
             "data": data,
-            "postcode": postcode,
-            # "area_data": get_area_data(data),
-            "is_improving": is_improving
+            "postcode": postcode
         }
     )

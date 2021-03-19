@@ -9,7 +9,6 @@ from typing import Union
 from functools import lru_cache
 
 # 3rd party:
-# from flask import current_app as app
 
 # Internal:
 

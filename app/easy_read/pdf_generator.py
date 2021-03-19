@@ -11,13 +11,10 @@ import re
 from asyncio import sleep
 
 # 3rd party:
-# from flask import g, redirect, make_response, request
 from latex import build_pdf
 from starlette.responses import RedirectResponse
 
 # Internal: 
-from .views import easy_read, local_easy_read
-from app.common.data.queries import get_area_data, AreaType
 from app.storage import AsyncStorageClient
 from app.common.utils import get_release_timestamp
 from app.landing.views import get_home_page

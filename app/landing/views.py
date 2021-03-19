@@ -20,7 +20,6 @@ from os.path import abspath, split as split_path, join as join_path
 from pandas import DataFrame
 
 # Internal:
-from ..common.data.variables import DestinationMetrics, IsImproving
 from ..database.postgres import Connection
 from ..template_processor import render_template
 
@@ -94,17 +93,6 @@ async def get_landing_data(conn, timestamp):
     return df
 
 
-def is_improving(metric, value):
-    if value == 0:
-        return None
-
-    improving = IsImproving[metric](value)
-    if isinstance(improving, bool):
-        return improving
-
-    return None
-
-
 async def get_home_page(request, timestamp: str, invalid_postcode=None, render=True) -> Union[render_template, DataFrame]:
     async with Connection() as conn:
         data = await get_landing_data(conn, timestamp)
@@ -118,8 +106,6 @@ async def get_home_page(request, timestamp: str, invalid_postcode=None, render=T
         context={
             "timestamp": timestamp,
             "data": data,
-            "cards": DestinationMetrics,
-            "is_improving": is_improving,
             "invalid_postcode": invalid_postcode
         }
     )

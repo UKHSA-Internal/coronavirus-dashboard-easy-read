@@ -15,17 +15,11 @@ Contributors:  Pouria Hadjibagheri
 from os import getenv
 from datetime import datetime
 from operator import itemgetter
-from typing import Dict
-from json import loads
 
 # 3rd party:
-# from flask import current_app as app
 
 # Internal:
-# from .caching import cache_client
-# from .data.queries import get_last_fortnight, change_by_metric
-from .data.variables import DestinationMetrics
-from ..storage import StorageClient, AsyncStorageClient
+from ..storage import AsyncStorageClient
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -33,63 +27,6 @@ CLOUD_ROLE_NAME = getenv("WEBSITE_SITE_NAME", "landing-page")
 
 get_value = itemgetter("value")
 get_area_type = itemgetter("areaType")
-
-
-# @cache_client.memoize(60 * 60 * 12)
-def get_og_image_names(latest_timestamp: str) -> list:
-    ts_python_iso = latest_timestamp[:-2]
-    ts = datetime.fromisoformat(ts_python_iso)
-    date = ts.strftime("%Y%m%d")
-    og_names = [
-        f"/downloads/og-images/og-{metric['metric']}_{date}.png"
-        for metric in DestinationMetrics.values()
-    ]
-
-    og_names.insert(0, f"/downloads/og-images/og-summary_{date}.png")
-
-    return og_names
-
-
-# def get_card_data(latest_timestamp: str, category: str, metric_data, graph=True):
-#     metric_name = DestinationMetrics[category]["metric"]
-#
-#     change = change_by_metric(latest_timestamp, category, postcode=None)
-#
-#     response = {
-#         "data": metric_data,
-#         "change": change,
-#         "latest_date": metric_data[0]["date"].strftime('%-d %B %Y')
-#     }
-#
-#     if graph:
-#         response["graph"] = plot_thumbnail(metric_data, change, metric_name)
-#
-#     return response
-
-
-# @cache_client.memoize(60 * 60 * 6)
-# def get_fortnight_data(latest_timestamp: str, area_name: str = "United Kingdom") -> Dict[str, dict]:
-#     result = dict()
-#
-#     for category, metadata in DestinationMetrics.items():
-#         metric_name = metadata['metric']
-#         metric_data = get_last_fortnight(latest_timestamp, area_name, category)
-#         result[metric_name] = get_card_data(latest_timestamp, category, metric_data)
-#
-#     return result
-
-
-# @cache_client.memoize(60 * 60 * 6)
-# def get_main_data(latest_timestamp: str):
-#     # ToDo: Integrate this with postcode data.
-#     data = get_fortnight_data(latest_timestamp)
-#
-#     cards = [
-#         {**item, **data[item['metric']], "data": data[item["metric"]]['data']}
-#         for item in DestinationMetrics.values()
-#     ]
-#
-#     return dict(cards=cards)
 
 
 def get_by_smallest_areatype(items, areatype_getter):
