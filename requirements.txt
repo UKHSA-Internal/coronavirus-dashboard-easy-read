@@ -1,19 +1,6 @@
-# azure-core==1.10.0
-# azure-common==1.1.26
-# azure-nspkg==3.0.2
-# azure-storage-common==2.1.0
-# azure-storage-nspkg==3.1.0
 azure-storage-blob
-# azure-cosmos==4.2.0
-# flask==1.1.2
-# flask-minify==0.29
-# werkzeug==1.0.1
-# redis==3.5.3
 pytz
-# flask-caching==1.9.0
-# flask_cors==3.0.10
 opencensus-ext-azure
-# opencensus-ext-flask==0.7.4
 opencensus-ext-logging
 opencensus-ext-requests
 latex==0.7.0
@@ -26,3 +13,4 @@ aiohttp
 uvicorn[standard]
 gunicorn
 starlette
+orjson
