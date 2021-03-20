@@ -25,6 +25,7 @@ from azure.storage.blob.aio import (
 )
 
 # Internal:
+from app.common.trace_wrappers import trace_async_method_operation
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -263,6 +264,8 @@ class AsyncLockBlob:
 
 
 class AsyncStorageClient:
+    _name = "Azure Blob"
+
     def __init__(self, container: str, path: str = str(),
                  connection_string: str = STORAGE_CONNECTION_STRING,
                  content_type: Union[str, None] = DEFAULT_CONTENT_TYPE,
@@ -273,7 +276,7 @@ class AsyncStorageClient:
         self.path = path
         self.compressed = compressed
         self._connection_string = connection_string
-        self._container_name = container
+        self.container = container
         self._tier = getattr(StandardBlobTier, tier, None)
         self._lock = None
 
@@ -303,6 +306,8 @@ class AsyncStorageClient:
             min_large_block_upload_threshold=8 * 1024 * 1024 + 1
         )
 
+        self.account_name = self.client.account_name
+
     async def __aenter__(self) -> 'AsyncStorageClient':
         await self.client.__aenter__()
         return self
@@ -310,24 +315,60 @@ class AsyncStorageClient:
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> NoReturn:
         await self.client.__aexit__()
 
-    def set_tier(self, tier: str):
-        self.client.set_standard_blob_tier(tier)
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="set_trie"
+    )
+    async def set_tier(self, tier: str):
+        await self.client.set_standard_blob_tier(tier)
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="exists"
+    )
     async def exists(self):
         return await self.client.exists()
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="delete"
+    )
     async def delete(self):
         response = await self.client.delete_blob()
         return response
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="set_lock"
+    )
     def lock_file(self, duration):
         self._lock = AsyncLockBlob(self.client, duration)
         return self._lock
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="query_lock"
+    )
     async def is_locked(self):
         props = await self.client.get_blob_properties()
         return props.lease.status == "locked"
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="upload"
+    )
     async def upload(self, data: Union[str, bytes], overwrite: bool = True,
                      blob_type: BlobType = BlobType.BlockBlob) -> NoReturn:
         """
@@ -372,14 +413,32 @@ class AsyncStorageClient:
 
         return await upload
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="create_append_blob"
+    )
     async def create_append_blob(self):
         process = self.client.create_append_blob(content_settings=self._content_settings)
         return await process
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="seal_append_blob"
+    )
     async def seal_append_blob(self):
         sealant = self.client.seal_append_blob(lease=self._lock)
         return await sealant
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="append"
+    )
     async def append_blob(self, data: Union[str, bytes]):
         if self.compressed:
             prepped_data = compress(data.encode() if isinstance(data, str) else data)
@@ -397,17 +456,35 @@ class AsyncStorageClient:
 
         return await upload
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="download"
+    )
     async def download(self) -> AsyncStorageStreamDownloader:
         data = await self.client.download_blob()
-        logging.info(f"Downloaded blob '{self._container_name}/{self.path}'")
+        logging.info(f"Downloaded blob '{self.container}/{self.path}'")
         return data
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="list"
+    )
     async def list_blobs(self):
         async with AsyncBlobServiceClient.from_connection_string(self._connection_string) as client:
-            container: AsyncContainerClient = client.get_container_client(self._container_name)
+            container: AsyncContainerClient = client.get_container_client(self.container)
             async for blob in container.list_blobs(name_starts_with=self.path):
                 yield blob
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="download chunks"
+    )
     async def download_chunks(self):
         props = await self.client.get_blob_properties()
         blob_size = int(props['size'])
@@ -430,11 +507,23 @@ class AsyncStorageClient:
             # aiohttp.client_exceptions.ClientPayloadError: 400, message='Can not decode content-encoding: gzip'
             yield await data.readall()
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="download into"
+    )
     async def download_into(self, fp):
         download_obj = await self.download()
         await download_obj.readinto(fp)
         fp.seek(0)
         return True
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="set tags"
+    )
     async def set_tags(self, tags: dict[str, str]):
         return await self.client.set_blob_tags(tags)
