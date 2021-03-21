@@ -23,6 +23,7 @@ class Settings:
     server_location = getenv('SERVER_LOCATION', "N/A")
     log_level = getenv("LOG_LEVEL", "INFO")
     healthcheck_path = "healthcheck"
+    cloud_role_name = getenv("WEBSITE_SITE_NAME", "easyread-page")
     website_timestamp = {
         "container": "publicdata",
         "path":  "assets/dispatch/website_timestamp"
@@ -31,10 +32,3 @@ class Settings:
         "container": "pipeline",
         "path": "info/latest_published"
     }
-
-
-class Config(object):
-    TESTING = Settings.TESTING
-    DEBUG = Settings.DEBUG
-    SECRET_KEY = getenv('FLASK_SECRET_KEY')
-    APPLICATION_ROOT = "/"
