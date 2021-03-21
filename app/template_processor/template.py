@@ -19,7 +19,6 @@ from pytz import timezone
 from ..config import Settings
 from .types import DataItem
 from ..common.utils import get_release_timestamp
-# from app.common.utils import add_cloud_role_name
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
