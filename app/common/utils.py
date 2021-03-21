@@ -13,13 +13,13 @@ Contributors:  Pouria Hadjibagheri
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Python:
 from os import getenv
-from datetime import datetime
 from operator import itemgetter
 
 # 3rd party:
 
 # Internal:
-from ..storage import AsyncStorageClient
+from app.storage import AsyncStorageClient
+from app.config import Settings
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -60,12 +60,7 @@ def add_cloud_role_name(envelope):
 
 
 async def get_release_timestamp():
-    latest_published_timestamp = {
-        "container": "pipeline",
-        "path": "info/latest_published"
-    }
-
-    async with AsyncStorageClient(**latest_published_timestamp) as client:
+    async with AsyncStorageClient(**Settings.latest_published_timestamp) as client:
         data = await client.download()
         timestamp = await data.readall()
 
