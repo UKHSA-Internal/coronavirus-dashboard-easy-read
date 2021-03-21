@@ -23,8 +23,6 @@ from app.config import Settings
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-CLOUD_ROLE_NAME = getenv("WEBSITE_SITE_NAME", "easyread-page")
-
 get_value = itemgetter("value")
 get_area_type = itemgetter("areaType")
 
@@ -55,7 +53,7 @@ def get_by_smallest_areatype(items, areatype_getter):
 
 
 def add_cloud_role_name(envelope):
-    envelope.tags['ai.cloud.role'] = CLOUD_ROLE_NAME
+    envelope.tags['ai.cloud.role'] = Settings.cloud_role_name
     return True
 
 
