@@ -240,11 +240,14 @@ class StorageClient:
 
 
 class AsyncLockBlob:
+    _name = "Azure Blob"
+
     def __init__(self, client: AsyncBlobClient, duration: int):
         self._client = client
         self._duration = duration
         self.id = str(uuid4())
         self._lock = AsyncBlobLeaseClient(self._client, lease_id=self.id)
+        self.account_name = self._client.account_name
 
     async def __aenter__(self):
         await self.acquire()
@@ -253,12 +256,30 @@ class AsyncLockBlob:
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.release()
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="release_lock"
+    )
     def release(self):
         return self._lock.release()
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="set_lock"
+    )
     def acquire(self):
         return self._lock.acquire(self._duration)
 
+    @trace_async_method_operation(
+        "container", "path",
+        name="account_name",
+        dep_type="_name",
+        action="renew_lock"
+    )
     def renew(self):
         return self._lock.renew()
 
@@ -343,12 +364,6 @@ class AsyncStorageClient:
         response = await self.client.delete_blob()
         return response
 
-    @trace_async_method_operation(
-        "container", "path",
-        name="account_name",
-        dep_type="_name",
-        action="set_lock"
-    )
     def lock_file(self, duration):
         self._lock = AsyncLockBlob(self.client, duration)
         return self._lock
