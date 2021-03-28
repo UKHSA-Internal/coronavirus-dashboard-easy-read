@@ -1,4 +1,4 @@
 echo "Running entrypoint.py"
-python /entrypoint.py
+python /prestart.py
 supervisorctl restart nginx
 
