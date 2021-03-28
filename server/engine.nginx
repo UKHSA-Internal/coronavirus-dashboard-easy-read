@@ -25,10 +25,11 @@ upstream application {
 
 server {
 
+    include            /opt/hosts.nginx;
     gzip               off;
     server_tokens      off;
     listen             5000;
-    server_name        ${URL_LOCATION};
+    server_name        $url_location;
     keepalive_timeout  65s;
     resolver_timeout   30s;
     uwsgi_read_timeout 60s;
@@ -137,25 +138,25 @@ server {
 
     location /assets {
 
-        proxy_pass             https://${URL_LOCATION}/assets/;
+        proxy_pass             https://$url_location/assets/;
 
     }
 
     location = /sitemap.xml {
 
-        proxy_pass             https://${URL_LOCATION}/public/assets/supplements/sitemap.xml;
+        proxy_pass             https://$url_location/public/assets/supplements/sitemap.xml;
 
     }
 
     location ~ (manifest\.json)$ {
 
-        proxy_pass             https://${URL_LOCATION};
+        proxy_pass             https://$url_location;
 
     }
 
     location ~ ^(/favicon.+)$ {
 
-        proxy_pass             https://${URL_LOCATION};
+        proxy_pass             https://$url_location;
 
     }
 
