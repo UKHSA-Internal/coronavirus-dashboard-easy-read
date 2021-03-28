@@ -30,10 +30,10 @@ RUN apt-get update                                                 && \
     apt-get install -y --no-install-recommends supervisor texlive  && \
     rm -rf /var/lib/apt/lists/*
 
-RUN addgroup --system --gid 102 app                                && \
+RUN addgroup --system --gid 123 app                                && \
     adduser  --system --disabled-login --ingroup app                  \
              --no-create-home --home /nonexistent                     \
-             --gecos "app user" --shell /bin/false --uid 102 app
+             --gecos "app user" --shell /bin/false --uid 123 app
 
 
 COPY server/base.nginx               ./nginx.conf
