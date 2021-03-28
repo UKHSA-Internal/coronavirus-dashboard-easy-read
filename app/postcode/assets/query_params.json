@@ -32,7 +32,6 @@
       "newCasesByPublishDateChangePercentage",
       "newCasesByPublishDateRollingSum",
       "newCasesByPublishDateDirection",
-      "alertLevel",
       "newVirusTests",
       "newVirusTestsChange",
       "newVirusTestsChangePercentage",
