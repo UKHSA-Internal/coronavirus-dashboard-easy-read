@@ -30,15 +30,21 @@ RUN apt-get update                                                 && \
     apt-get install -y --no-install-recommends supervisor texlive  && \
     rm -rf /var/lib/apt/lists/*
 
+RUN addgroup --system --gid 102 app                                && \
+    adduser  --system --disabled-login --ingroup app                  \
+             --no-create-home --home /nonexistent                     \
+             --gecos "app user" --shell /bin/false --uid 102 app
+
+
 COPY server/base.nginx               ./nginx.conf
 COPY server/upload.nginx              /etc/nginx/conf.d/upload.conf
 COPY server/engine.nginx              /etc/nginx/conf.d/engine.conf
 
 COPY ./requirements.txt               /requirements.txt
 
-RUN python3 -m pip install --no-cache-dir -U pip                       && \
-    python3 -m pip install --no-cache-dir setuptools                   && \
-    python3 -m pip install --no-cache-dir -r /requirements.txt         && \
+RUN python3 -m pip install --no-cache-dir -U pip                   && \
+    python3 -m pip install --no-cache-dir setuptools               && \
+    python3 -m pip install -U --no-cache-dir -r /requirements.txt  && \
     rm /requirements.txt
 
 # Gunicorn config
@@ -68,6 +74,8 @@ COPY prestart.sh                       ./prestart.sh
 
 COPY ./entrypoint.py                    /entrypoint.py
 RUN chmod +x /entrypoint.py
+
+USER app
 
 EXPOSE 5000
 
