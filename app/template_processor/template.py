@@ -92,7 +92,6 @@ async def render_template(request, template_name: str, context: Optional[Dict[st
     template_context = dict(
         request=request,
         app_insight_token=Settings.instrumentation_key,
-        # og_images=get_og_image_names(context["timestamp"]),
         **context
     )
 
