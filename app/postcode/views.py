@@ -15,7 +15,7 @@ from typing import Union, Any
 from pandas import DataFrame
 
 # Internal:
-from .types import AlertsType, QueryDataType
+from .types import QueryDataType
 from .utils import get_validated_postcode
 from ..database.postgres import Connection
 from ..template_processor import render_template
@@ -35,10 +35,6 @@ assets_dir = join_path(curr_dir, "assets")
 
 with open(join_path(queries_dir, "local_data.sql")) as fp:
     local_data_query = fp.read()
-
-
-with open(join_path(assets_dir, "alert_levels.json")) as fp:
-    alerts: AlertsType = load(fp)
 
 
 with open(join_path(assets_dir, "query_params.json")) as fp:
