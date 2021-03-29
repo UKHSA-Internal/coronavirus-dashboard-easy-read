@@ -258,7 +258,12 @@ def comparison_verb(number, greater, smaller, same):
 
 @as_template_filter
 def smallest_area_name(df: DataFrame) -> str:
-    small_areas = df.sort_values("rank").iloc[0]
+    small_areas = (
+        df
+        .loc[df.areaType.isin(["overview", "nation", "region", "utla", "ltla", "msoa"])]
+        .sort_values("rank")
+        .iloc[0]
+    )
 
     return small_areas.areaName
 
