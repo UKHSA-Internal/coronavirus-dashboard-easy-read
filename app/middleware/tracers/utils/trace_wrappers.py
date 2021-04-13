@@ -3,6 +3,7 @@
 # Imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Python:
+from logging import getLogger
 from functools import wraps
 from inspect import signature
 
@@ -18,6 +19,8 @@ __all__ = [
     'trace_async_method_operation',
     'trace_method_operation'
 ]
+
+logger = getLogger("app")
 
 
 def trace_async_method_operation(*cls_attrs, dep_type="name", name="name", **attrs):
@@ -65,6 +68,7 @@ def trace_async_method_operation(*cls_attrs, dep_type="name", name="name", **att
                 return await func(klass, *args, **kwargs)
             except Exception as err:
                 success = False
+                logger.exception(err, exc_info=True)
                 raise err
             finally:
                 span.add_attribute(f'{dependency_type}.success', success)
@@ -120,6 +124,7 @@ def trace_method_operation(*cls_attrs, dep_type="name", name="name", **attrs):
                 return func(klass, *args, **kwargs)
             except Exception as err:
                 success = False
+                logger.exception(err, exc_info=True)
                 raise err
             finally:
                 span.add_attribute(f'{dependency_type}.success', success)
