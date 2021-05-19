@@ -1,4 +1,4 @@
-# Coronavirus (COVID-19) in the UK
+# Coronavirus (COVID-19) in the UK - Easy-Read
 
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/publichealthengland/coronavirus-dashboard-easy-read)
 
