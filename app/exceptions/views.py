@@ -47,7 +47,7 @@ async def handle_404(request: Request, exc, **context):
 
     return await render_template(
         request,
-        "errors/404.html",
+        "errors/40x.html",
         context={
             "status_code": status_code,
             "status_detail": status_detail,
