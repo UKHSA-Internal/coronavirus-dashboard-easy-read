@@ -1,7 +1,8 @@
 # Coronavirus (COVID-19) in the UK - Easy-Read
 
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/publichealthengland/coronavirus-dashboard-easy-read)
-
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/publichealthengland/coronavirus-dashboard-easy-read.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/publichealthengland/coronavirus-dashboard-easy-read/context:javascript)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/publichealthengland/coronavirus-dashboard-easy-read.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/publichealthengland/coronavirus-dashboard-easy-read/context:python)
 
 This is the source code for the [easy read pages](https://coronavirus.data.gov.uk/easy_read) and PDF generator.
 
