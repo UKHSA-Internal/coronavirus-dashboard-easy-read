@@ -12,7 +12,6 @@ Contributors:  Pouria Hadjibagheri
 # Imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Python:
-from os import getenv
 from operator import itemgetter
 
 # 3rd party:

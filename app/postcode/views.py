@@ -3,7 +3,6 @@
 # Imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Python:
-import logging
 from datetime import datetime
 from os.path import abspath, split as split_path, join as join_path
 from operator import itemgetter
@@ -44,12 +43,6 @@ with open(join_path(assets_dir, "query_params.json")) as fp:
 async def get_postcode_data(conn: Any, timestamp: str, postcode: str) -> DataFrame:
     ts = datetime.fromisoformat(timestamp.replace("5Z", ""))
     partition_ts = f"{ts:%Y_%-m_%-d}"
-    partition_ids = [
-        f"{partition_ts}|other",
-        f"{partition_ts}|ltla",
-        f"{partition_ts}|utla",
-        f"{partition_ts}|nhstrust",
-    ]
     msoa_partition = f"{partition_ts}_msoa"
     msoa_metric = query_data["local_data"]["msoa_metric"]
 
@@ -61,7 +54,6 @@ async def get_postcode_data(conn: Any, timestamp: str, postcode: str) -> DataFra
     substitutes = (
         query_data["local_data"]["metrics"],
         postcode,
-        # partition_ids,
         f"{msoa_metric}%",
         ["%Percentage%", "%Rate%"]
     )

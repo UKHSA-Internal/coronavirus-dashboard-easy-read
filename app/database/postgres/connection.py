@@ -11,8 +11,6 @@ from os import getenv
 from asyncpg import connect, Connection as PGConnection
 from orjson import loads, dumps
 
-from asyncpg.exceptions import PostgresLogMessage
-
 # Internal:
 from app.middleware.tracers.utils import trace_async_method_operation
 
