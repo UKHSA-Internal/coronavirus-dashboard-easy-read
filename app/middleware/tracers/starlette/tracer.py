@@ -44,12 +44,13 @@ logger = logging.getLogger("app")
 
 
 class TraceRequestMiddleware(BaseHTTPMiddleware):
-    def __init__(self, app, sampler, instrumentation_key, cloud_role_name,
+    def __init__(self, app, sampler, instrumentation_key, cloud_role_name, instance_role_id,
                  extra_attrs: Dict[str, str],
                  logging_instances: Iterable[Iterable[Union[logging.Logger, int]]]):
 
         self.exporter = Exporter(connection_string=instrumentation_key)
         self.exporter.add_telemetry_processor(cloud_role_name)
+        self.exporter.add_telemetry_processor(instance_role_id)
 
         self.app = app
 
@@ -59,6 +60,7 @@ class TraceRequestMiddleware(BaseHTTPMiddleware):
         self.handler = AzureLogHandler(connection_string=instrumentation_key)
 
         self.handler.add_telemetry_processor(cloud_role_name)
+        self.handler.add_telemetry_processor(instance_role_id)
         super(TraceRequestMiddleware, self).__init__(app)
 
         for log, level in logging_instances:

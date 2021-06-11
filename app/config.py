@@ -24,6 +24,7 @@ class Settings:
     log_level = getenv("LOG_LEVEL", "INFO")
     healthcheck_path = "healthcheck"
     cloud_role_name = getenv("WEBSITE_SITE_NAME", "easyread-page")
+    cloud_instance_id = getenv("WEBSITE_INSTANCE_ID", "local")
     website_timestamp = {
         "container": "publicdata",
         "path":  "assets/dispatch/website_timestamp"

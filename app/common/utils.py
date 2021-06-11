@@ -56,6 +56,11 @@ def add_cloud_role_name(envelope):
     return True
 
 
+def add_instance_role_id(envelope):
+    envelope.tags['ai.cloud.roleInstance'] = Settings.cloud_instance_id
+    return True
+
+
 async def get_release_timestamp():
     async with AsyncStorageClient(**Settings.latest_published_timestamp) as client:
         data = await client.download()

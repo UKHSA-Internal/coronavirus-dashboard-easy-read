@@ -23,7 +23,7 @@ from app.config import Settings
 from app.views import base_router
 from app.healthcheck import run_healthcheck
 from app.exceptions import exception_handlers
-from app.common.utils import add_cloud_role_name
+from app.common.utils import add_cloud_role_name, add_instance_role_id
 from app.middleware.tracers.starlette import TraceRequestMiddleware
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -73,6 +73,7 @@ middleware = [
         sampler=AlwaysOnSampler(),
         instrumentation_key=Settings.instrumentation_key,
         cloud_role_name=add_cloud_role_name,
+        instance_role_id=add_instance_role_id,
         extra_attrs=dict(
             environment=Settings.ENVIRONMENT,
             server_location=Settings.server_location
