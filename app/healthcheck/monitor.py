@@ -56,7 +56,7 @@ async def run_healthcheck(request: Request) -> Union[JSONResponse, Response]:
     loop = get_event_loop()
 
     tasks = [
-        loop.create_task(test_db()),
+        # loop.create_task(test_db()),  # Too frequent - needs to be revised.
         loop.create_task(test_storage())
     ]
 
