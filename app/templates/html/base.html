@@ -7,20 +7,20 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="theme-color" content="#0b0c0c">
 	<meta name="keywords"
-	      content="official,COVID19,COVID-19,Coronavirus,Public Health England,United Kingdom,Data,Charts,Download,Coronavirus tracker,PHE,UK,API,MSOA,postcode,dashboard,easy read,summary">
+	      content="official,COVID19,COVID-19,Coronavirus,UK Health Security Agency,United Kingdom,Data,Charts,Download,Coronavirus tracker,UKHSA,UK,API,MSOA,postcode,dashboard,easy read,summary">
 	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:site" content="@PHE_uk">
+	<meta name="twitter:site" content="@UKHSA">
 	<meta property="og:type" content="website">
 	<meta property="og:locale" content="en_GB"/>
 	<meta name="twitter:image" content="https://coronavirus.data.gov.uk/assets/public/images/opengraph-image.png">
 	<meta property="og:image" content="https://coronavirus.data.gov.uk/assets/public/images/opengraph-image.png">
-	<link rel="apple-touch-icon" href="/favicon.png">
-	<link rel="icon" href="/favicon.ico">
-	<link rel="manifest" href="/manifest.json">
+	<meta name="instrumentation_key" content="{{ app_insight_token }}">
+	<link rel="apple-touch-icon" href="https://coronavirus.data.gov.uk/public/assets/summary/icon/favicon.png">
+	<link rel="icon" href="https://coronavirus.data.gov.uk/public/assets/summary/icon/favicon.ico">
 	{% if area_name == 'United Kingdom' %}
 		<title>Simple summary - UK  | Coronavirus in the UK</title>
-		<meta property="og:title" content="Simple summary - UK  | Coronavirus in the UK">
-		<meta name="twitter:title" content="Simple summary - UK  | Coronavirus in the UK">
+		<meta property="og:title" content="Simple summary - UK | Coronavirus in the UK">
+		<meta name="twitter:title" content="Simple summary - UK | Coronavirus in the UK">
 		<meta name="description" content="Simple summary of the coronavirus (COVID-19) disease in the UK.">
 		<meta property="og:description" content="Simple summary of the coronavirus (COVID-19) disease in the UK.">
 		<meta name="twitter:description" content="Simple summary of the coronavirus (COVID-19) disease in the UK.">
@@ -33,15 +33,18 @@
 		<meta name="twitter:description" content="Simple summary of the coronavirus (COVID-19) disease in {{ area_name }}, UK.">
 	{% endif %}
 	{% include "html/components/analytics.html" %}
-	<link rel="preload" href="/assets/govuk-frontend/govuk/assets/fonts/light-94a07e06a1-v2.woff2" as="font" type="font/woff2" crossorigin>
-	<link rel="preload" href="/assets/govuk-frontend/govuk/assets/fonts/bold-b542beb274-v2.woff2" as="font" type="font/woff2" crossorigin>
-	<link rel="preload" href="/assets/application.css?tm={{ timestamp }}" as="style" type="text/css">
-	<link rel="preload" href="{{ url_for("static", path="easy_read.css") }}?tm={{ timestamp }}" as="style" type="text/css">
-	<link rel="stylesheet" href="/assets/application.css?tm={{ timestamp }}" as="style" type="text/css">
-	<link rel="stylesheet" href="{{ url_for("static", path="easy_read.css") }}?tm={{ timestamp }}" as="style" type="text/css">
+	<link rel="preload" href="{{ url_for("static", path="/fonts/light-94a07e06a1-v2.woff2") }}" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="{{ url_for("static", path="/fonts/bold-b542beb274-v2.woff2") }}" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="{{ url_for("static", path="/css/application.css") }}?tm={{ timestamp }}" as="style" type="text/css">
+	<link rel="stylesheet" href="{{ url_for("static", path="/css/application.css") }}?tm={{ timestamp }}" as="style" type="text/css">
+	<link rel="stylesheet" href="{{ url_for("static", path="easy_read/easy_read.css") }}?tm={{ timestamp }}" as="style" type="text/css">
+	<script async src="https://www.clarity.ms/tag/6r17g7ix0s?ref=bwt"></script>
+	<script type="application/javascript" async src="https://www.googletagmanager.com/gtag/js?id=UA-161400643-2"></script>
+	<script type="application/javascript" async src="https://www.clarity.ms/eus-b/s/0.6.24/clarity.js"></script>
+	<script type="application/javascript" src="{{ url_for("static", path="/js/mscl.js") }}"></script>
+	<script type="application/javascript" src="{{ url_for("static", path="/js/gat.js") }}"></script>
 </head>
 <body class="govuk-template__body {% block body_class %}{% endblock %}">
-<script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 {% include "html/components/cookie_banner.html" %}
 {% block full_content %}
 	{%- include "html/components/header.html" -%}
@@ -78,6 +81,7 @@
 </div>
 {% include "html/components/footer.html" %}
 {% endblock %}
-<script>"use strict";function gtag(){window.dataLayer.push(arguments)}var setCookies=function(){window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","UA-161400643-2",{anonymize_ip:!0,allowAdFeatures:!1}),window.ga("create","UA-145652997-1","auto","govuk_shared",{allowLinker:!0}),window.ga("govuk_shared.require","linker"),window.ga("govuk_shared.set","anonymizeIp",!0),window.ga("govuk_shared.set","allowAdFeatures",!1),window.ga("govuk_shared.linker:autoLink",["www.gov.uk"]),window.ga("send","pageview"),window.ga("govuk_shared.send","pageview")},removeCookies=function(){document.cookie="_ga=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;",document.cookie="_gid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;",document.cookie="_gat_gtag_UA_161400643_2=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;",document.cookie="LocationBanner=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"},determineCookieState=function(){var e=document.cookie.split(";").find(function(e){return e.trim().startsWith("cookies_preferences_set_21_3")});if(!e||"true"!==e.split("=")[1]){var o=document.querySelector("#cookie-banner");o.style.display="block",o.style.visibility="visible"}};function showElement(e){e.style.display="block",e.style.visibility="visible"}function hideElement(e){e.remove()}function runCookieJobs(){var e=document.querySelector("#global-cookie-message");document.querySelector("#accept-cookies").onclick=function(){var o=new Date,t=o.getFullYear(),n=o.getMonth(),i=o.getDate(),c=new Date(t,n+1,i).toUTCString();document.cookie="cookies_policy_21_3="+encodeURIComponent('{"essential":true,"usage":true,"preferences":true}')+"; expires="+c+";",document.cookie="cookies_preferences_set_21_3=true; expires="+c+";",setCookies(),showElement(e),hideElement(document.querySelector("#cookie-banner")),document.querySelector("#hide-cookie-decision").onclick=function(){hideElement(e)}},document.querySelector("#reject-cookies").onclick=function(){var o=new Date,t=o.getFullYear(),n=o.getMonth(),i=o.getDate(),c=new Date(t,n+1,i).toUTCString();document.cookie="cookies_policy_21_3="+encodeURIComponent('{"essential":true,"usage":false,"preferences":false}')+"; expires="+c+";",document.cookie="cookies_preferences_set_21_3=true; expires="+c+";",removeCookies(),e.innerHTML=e.innerHTML.replace("accepted","rejected"),showElement(e),hideElement(document.querySelector("#cookie-banner")),document.querySelector("#hide-cookie-decision").onclick=function(){hideElement(e)}},determineCookieState()}"loading"!==document.readyState?runCookieJobs():document.addEventListener("DOMContentLoaded",runCookieJobs);</script>
+<script type="application/javascript" defer="" src="{{ url_for("static", path="/js/msai.js") }}"></script>
+<script type="application/javascript" src="{{ url_for("static", path="/js/cookies.js") }}"></script>
 </body>
 </html>
