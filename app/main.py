@@ -51,7 +51,7 @@ routes = [
     Route('/easy_read/download/{area_type:str}/{area_code:str}', endpoint=get_pdf, methods=["GET", "HEAD"]),
     Route(f'/{Settings.healthcheck_path}', endpoint=run_healthcheck, methods=["GET", "HEAD"]),
     Route(f'/easy_read/{Settings.healthcheck_path}', endpoint=run_healthcheck, methods=["GET", "HEAD"]),
-    Mount('/easy_read/assets', StaticFiles(directory="static"), name="static")
+    Mount('/public/assets/summary', StaticFiles(directory="static"), name="static")
 ]
 
 logging_instances = [
