@@ -65,4 +65,8 @@ Please consult the [GOV.UK Service Manual](https://www.gov.uk/service-manual/des
 additional information.
 
 ## Credits
-This service is developed and maintained by [Public Health England](https://www.gov.uk/government/organisations/public-health-england).
+This service is developed and maintained by [UK Health Security Agency](https://www.gov.uk/government/organisations/uk-health-security-agency).
+
+---
+
+Copyright (c) 2020-2021 UK Health Security Agency
