@@ -15,7 +15,7 @@
 	</div>
 
 	{% if area_name != "United Kingdom" %}
-		{% set testingAreaName = "in " + ("newVirusTests" | get_data(data)).areaName %}
+		{% set testingAreaName = "in " + ("newVirusTestsByPublishDate" | get_data(data)).areaName %}
 		{% set casesAreaName = "in " + ("newCasesByPublishDate" | get_data(data)).areaName %}
 		{% set admissionsAreaName = "in " + ("newAdmissions" | get_data(data)).areaName %}
 		{% set vaccinationsAreaName = "in " + ("cumPeopleVaccinatedFirstDoseByPublishDate" | get_data(data)).areaName %}
