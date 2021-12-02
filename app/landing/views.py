@@ -61,11 +61,11 @@ metrics = [
     'newCasesByPublishDateDirection',
     'newCasesBySpecimenDateRollingRate',
 
-    'newVirusTests',
-    'newVirusTestsChange',
-    'newVirusTestsChangePercentage',
-    'newVirusTestsRollingSum',
-    'newVirusTestsDirection',
+    'newVirusTestsByPublishDate',
+    'newVirusTestsByPublishDateChange',
+    'newVirusTestsByPublishDateChangePercentage',
+    'newVirusTestsByPublishDateRollingSum',
+    'newVirusTestsByPublishDateDirection',
 
     'transmissionRateMin',
     'transmissionRateMax',
