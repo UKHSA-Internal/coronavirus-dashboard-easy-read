@@ -28,10 +28,6 @@ WITH
                   JOIN metrics ON metrics.id = metric_id
                   JOIN location ON location.id = ts.area_id
               WHERE released IS TRUE
-                AND (
-                       ( metric ILIKE '%virusTests%' AND area_type != 'region')
-                    OR metric NOT ILIKE '%virusTests%'
-                )
               UNION ALL
               (
                   SELECT hash,
@@ -48,7 +44,6 @@ WITH
                       JOIN metrics ON metrics.id = metric_id
                       JOIN location ON location.id = ts.area_id
                   WHERE released IS TRUE
-                    AND metric NOT ILIKE '%virusTests%'
               )
               UNION ALL
               (
@@ -66,7 +61,6 @@ WITH
                       JOIN metrics ON metrics.id = metric_id
                       JOIN location ON location.id = ts.area_id
                   WHERE released IS TRUE
-                    AND metric NOT ILIKE '%virusTests%'
               )
               UNION ALL
               (
