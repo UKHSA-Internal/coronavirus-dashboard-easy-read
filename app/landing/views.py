@@ -46,6 +46,7 @@ metrics = [
 
     'cumPeopleVaccinatedFirstDoseByPublishDate',
     'cumPeopleVaccinatedSecondDoseByPublishDate',
+    'cumPeopleVaccinatedThirdInjectionByPublishDate',
 
     'newDeaths28DaysByPublishDate',
     'newDeaths28DaysByPublishDateChange',
