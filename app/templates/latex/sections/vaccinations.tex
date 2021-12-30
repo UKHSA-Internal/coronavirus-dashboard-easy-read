@@ -1,6 +1,6 @@
 {% set first = ("cumPeopleVaccinatedFirstDoseByPublishDate" | get_data(data)) %}
 {% set second = ("cumPeopleVaccinatedSecondDoseByPublishDate" | get_data(data)) %}
-{% set second = ("cumPeopleVaccinatedThirdInjectionByPublishDate" | get_data(data)) %}
+{% set third = ("cumPeopleVaccinatedThirdInjectionByPublishDate" | get_data(data)) %}
 
 \section{Vaccinations{% if first.areaName != "United Kingdom" %} in {{ first.areaName | trim_area_name }}{% endif %} }
 
