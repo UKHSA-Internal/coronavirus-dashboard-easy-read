@@ -67,14 +67,19 @@ It was last updated on {{ timestamp | as_date }}.
 {\linespread{1}
 \tableofcontents
 }
+
 \pagebreak
 
 {% include 'latex/sections/testing.tex' %}
 {% include 'latex/sections/cases.tex' %}
-{% include 'latex/sections/vaccinations.tex' %}
+
 \pagebreak
 
+{% include 'latex/sections/vaccinations.tex' %}
 {% include 'latex/sections/healthcare.tex' %}
+
+\pagebreak
+
 {% include 'latex/sections/deaths.tex' %}
 
 
