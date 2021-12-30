@@ -1,4 +1,4 @@
-{%- set area_name = data | smallest_area_name -%}
+{%- set area_name = (data | default([], true)) | smallest_area_name -%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
