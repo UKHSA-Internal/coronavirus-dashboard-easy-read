@@ -62,8 +62,6 @@ async def generate_pdf(request, data, area_type: str, timestamp: str) -> bytes:
             )
         )
 
-    # latex = str.join("", [item.decode() for item in resp])
-    print(resp)
     pdf_raw = build_pdf(resp)
 
     return pdf_raw.data
