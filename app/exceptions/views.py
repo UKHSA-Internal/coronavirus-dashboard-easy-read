@@ -47,7 +47,7 @@ async def handle_404(request: Request, exc, **context):
 
     return await render_template(
         request,
-        "errors/40x.html",
+        "html/errors/40x.html",
         context={
             "status_code": status_code,
             "status_detail": status_detail,
@@ -85,7 +85,7 @@ async def handle_500(request: Request, exc, **context):
 
     return await render_template(
         request,
-        "errors/50x.html",
+        "html/errors/50x.html",
         context={
             "status_code": status_code,
             "status_detail": status_detail,
