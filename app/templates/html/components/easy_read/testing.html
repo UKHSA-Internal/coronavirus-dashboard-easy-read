@@ -7,15 +7,10 @@
 <p>Testing is where we do a test to see who has coronavirus. Some people are tested more than
 	once.</p>
 
-<p>There {{ latest.raw | pluralise("was", "were", "were") }} <b>{{ latest.value }}</b>
-	test{{ latest.raw | pluralise("", "s", "s") }}
-	reported on {{ latest.date }}.
-	This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
+<p>Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }}, there have
+	been&nbsp;<b>{{ rollingSum.value }}</b>&nbsp;tests. This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
 	{% if change.raw != 0 -%}
 		of <b>{{ changePercentage.value }}%</b>
 	{%- endif %}
 	compared to the previous 7 days.
 </p>
-
-<p>Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }}, there have
-	been&nbsp;<b>{{ rollingSum.value }}</b>&nbsp;tests.</p>

@@ -5,8 +5,6 @@
 
 <h3 id="deaths">Deaths{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %}</h3>
 
-<p>There {{ latest.raw | pluralise("was", "were", "were") }}&nbsp;<b>{{ latest.value }}</b>&nbsp;death{{ latest.raw | pluralise("", "s", "s") }}
-	within 28 days of a positive test for coronavirus reported on {{ latest.date }}.</p>
 <p>Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }}, there have
 	been <b>{{ rollingSum.value }}</b> deaths within 28 days of a positive coronavirus test.
 	This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}&nbsp;

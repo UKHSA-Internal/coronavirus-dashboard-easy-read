@@ -6,8 +6,7 @@
 <h3 id="healthcare">Healthcare{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %}</h3>
 
 <p>Some people with coronavirus have to go into hospital.</p>
-<p><b>{{ latest.value }}</b> {{ latest.raw | pluralise("person", "people", "people") }} with
-	coronavirus went into hospital on {{ latest.date }}.</p>
+
 <p>Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }},
 	<b>{{ rollingSum.value }}</b>&nbsp;went into hospital with coronavirus.
 	This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}

@@ -7,9 +7,6 @@
 
 Some people with coronavirus have to go into hospital.
 
-{\bf {{ latest.value }}} {{ latest.raw | pluralise("person", "people", "people") }} with
-coronavirus went into hospital on {{ latest.date }}.
-
 Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }},
 {\bf {{ rollingSum.value }}} went into hospital with coronavirus. This
 shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
