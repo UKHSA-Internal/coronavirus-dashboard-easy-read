@@ -23,7 +23,8 @@ FROM (
     JOIN covid19.metric_reference  AS mr ON mr.id = metric_id
     JOIN covid19.area_reference    AS ar ON ar.id = main.area_id
     WHERE
-          area_type = 'overview'
+          area_type = 'nation'
+      AND area_name = 'England'
       AND date > ( DATE($1) - INTERVAL '20 days' )
       AND metric = ANY( $2::VARCHAR[] )
     GROUP BY area_type, area_code, date, metric
