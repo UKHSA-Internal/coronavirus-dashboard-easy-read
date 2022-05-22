@@ -68,13 +68,13 @@ async def generate_pdf(request, data, area_type: str, timestamp: str) -> bytes:
 
 
 async def create_and_redirect(request):
-    area_type = request.path_params.get("area_type", "overview")  # type: str
-    area_code = request.path_params.get("area_code", None)  # type: Union[str, None]
+    area_type = request.path_params.get("area_type", "nation")  # type: str
+    area_code = request.path_params.get("area_code", "E92000001")  # type: Union[str, None]
 
     timestamp = await get_release_timestamp()
 
     get_data = get_home_page
-    if area_code is not None:
+    if area_code is not None and area_code != "E92000001":
         get_data = postcode_page
 
     data = await get_data(request, timestamp, render=False)
