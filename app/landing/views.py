@@ -48,18 +48,18 @@ metrics = [
     'cumPeopleVaccinatedSecondDoseByPublishDate',
     'cumPeopleVaccinatedThirdInjectionByPublishDate',
 
-    'newDeaths28DaysByPublishDate',
-    'newDeaths28DaysByPublishDateChange',
-    'newDeaths28DaysByPublishDateChangePercentage',
-    'newDeaths28DaysByPublishDateRollingSum',
-    'newDeaths28DaysByPublishDateDirection',
+    'newDeaths28DaysByDeathDate',
+    'newDeaths28DaysByDeathDateChange',
+    'newDeaths28DaysByDeathDateChangePercentage',
+    'newDeaths28DaysByDeathDateRollingSum',
+    'newDeaths28DaysByDeathDateDirection',
     'newDeaths28DaysByDeathDateRollingRate',
 
-    'newCasesByPublishDate',
-    'newCasesByPublishDateChange',
-    'newCasesByPublishDateChangePercentage',
-    'newCasesByPublishDateRollingSum',
-    'newCasesByPublishDateDirection',
+    'newCasesBySpecimenDate',
+    'newCasesBySpecimenDateChange',
+    'newCasesBySpecimenDateChangePercentage',
+    'newCasesBySpecimenDateRollingSum',
+    'newCasesBySpecimenDateDirection',
     'newCasesBySpecimenDateRollingRate',
 
     'newVirusTestsByPublishDate',
@@ -107,6 +107,6 @@ async def get_home_page(request, timestamp: str, invalid_postcode=None, render=T
         context={
             "timestamp": timestamp,
             "data": data,
-            "invalid_postcode": invalid_postcode
+            "invalid_postcode": invalid_postcode,
         }
     )
