@@ -9,7 +9,7 @@
 </p>
 
 <p>
-	Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }},
+	Between {{ rollingSum.rawDate | subtract_days(6) | format_date }} and {{ rollingSum.date }},
 	<b>{{ rollingSum.value }}</b> people had a confirmed positive test result.
 	This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
 	{% if change.raw != 0 -%}

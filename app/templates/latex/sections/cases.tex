@@ -7,7 +7,7 @@
 
 A confirmed case is someone who has tested positive for coronavirus.
 
-Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }},
+Between {{ rollingSum.rawDate | subtract_days(6) | format_date }} and {{ rollingSum.date }},
 {\bf {{ rollingSum.value }}} people had a confirmed positive test result.
 This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
 {% if change.raw != 0 -%}
