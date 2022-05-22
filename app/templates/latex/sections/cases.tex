@@ -1,7 +1,7 @@
-{% set latest = ("newCasesByPublishDate" | get_data(data)) %}
-{% set change = ("newCasesByPublishDateChange" | get_data(data)) %}
-{% set changePercentage = ("newCasesByPublishDateChangePercentage" | get_data(data)) %}
-{% set rollingSum = ("newCasesByPublishDateRollingSum" | get_data(data)) %}
+{% set latest = ("newCasesBySpecimenDate" | get_data(data)) %}
+{% set change = ("newCasesBySpecimenDateChange" | get_data(data)) %}
+{% set changePercentage = ("newCasesBySpecimenDateChangePercentage" | get_data(data)) %}
+{% set rollingSum = ("newCasesBySpecimenDateRollingSum" | get_data(data)) %}
 
 \section{Cases{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | trim_area_name }}{% endif %} }
 
