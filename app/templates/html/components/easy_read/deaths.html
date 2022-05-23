@@ -1,11 +1,11 @@
-{% set latest = ("newDeaths28DaysByPublishDate" | get_data(data)) %}
-{% set change = ("newDeaths28DaysByPublishDateChange" | get_data(data)) %}
-{% set changePercentage = ("newDeaths28DaysByPublishDateChangePercentage" | get_data(data)) %}
-{% set rollingSum = ("newDeaths28DaysByPublishDateRollingSum" | get_data(data)) %}
+{% set latest = ("newDeaths28DaysByDeathDate" | get_data(data)) %}
+{% set change = ("newDeaths28DaysByDeathDateChange" | get_data(data)) %}
+{% set changePercentage = ("newDeaths28DaysByDeathDateChangePercentage" | get_data(data)) %}
+{% set rollingSum = ("newDeaths28DaysByDeathDateRollingSum" | get_data(data)) %}
 
 <h3 id="deaths">Deaths{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %}</h3>
 
-<p>Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }}, there have
+<p>Between {{ rollingSum.rawDate | subtract_days(6) | format_date }} and {{ rollingSum.date }}, there have
 	been <b>{{ rollingSum.value }}</b> deaths within 28 days of a positive coronavirus test.
 	This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}&nbsp;
 	{%- if change.raw != 0 -%}

@@ -1,7 +1,7 @@
-{% set latest = ("newCasesByPublishDate" | get_data(data)) %}
-{% set change = ("newCasesByPublishDateChange" | get_data(data)) %}
-{% set changePercentage = ("newCasesByPublishDateChangePercentage" | get_data(data)) %}
-{% set rollingSum = ("newCasesByPublishDateRollingSum" | get_data(data)) %}
+{% set latest = ("newCasesBySpecimenDate" | get_data(data)) %}
+{% set change = ("newCasesBySpecimenDateChange" | get_data(data)) %}
+{% set changePercentage = ("newCasesBySpecimenDateChangePercentage" | get_data(data)) %}
+{% set rollingSum = ("newCasesBySpecimenDateRollingSum" | get_data(data)) %}
 
 <h3 id="cases">Cases{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %}</h3>
 <p>
@@ -9,7 +9,7 @@
 </p>
 
 <p>
-	Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }},
+	Between {{ rollingSum.rawDate | subtract_days(6) | format_date }} and {{ rollingSum.date }},
 	<b>{{ rollingSum.value }}</b> people had a confirmed positive test result.
 	This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
 	{% if change.raw != 0 -%}

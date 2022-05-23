@@ -1,13 +1,13 @@
-{% set latest = ("newCasesByPublishDate" | get_data(data)) %}
-{% set change = ("newCasesByPublishDateChange" | get_data(data)) %}
-{% set changePercentage = ("newCasesByPublishDateChangePercentage" | get_data(data)) %}
-{% set rollingSum = ("newCasesByPublishDateRollingSum" | get_data(data)) %}
+{% set latest = ("newCasesBySpecimenDate" | get_data(data)) %}
+{% set change = ("newCasesBySpecimenDateChange" | get_data(data)) %}
+{% set changePercentage = ("newCasesBySpecimenDateChangePercentage" | get_data(data)) %}
+{% set rollingSum = ("newCasesBySpecimenDateRollingSum" | get_data(data)) %}
 
 \section{Cases{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | trim_area_name }}{% endif %} }
 
 A confirmed case is someone who has tested positive for coronavirus.
 
-Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }},
+Between {{ rollingSum.rawDate | subtract_days(6) | format_date }} and {{ rollingSum.date }},
 {\bf {{ rollingSum.value }}} people had a confirmed positive test result.
 This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
 {% if change.raw != 0 -%}

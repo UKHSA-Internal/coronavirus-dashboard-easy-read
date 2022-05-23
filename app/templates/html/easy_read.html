@@ -2,6 +2,8 @@
 
 {% set area_type = data | smallest_area_type %}
 {% set area_code = data | smallest_area_code %}
+{% set area_name = data | smallest_area_name %}
+
 
 {% block body_class %}easy-read{% endblock %}
 
@@ -14,12 +16,12 @@
 		</a>
 	</div>
 
-	{% if area_name != "United Kingdom" %}
+	{% if area_name != "England" %}
 		{% set testingAreaName = "in " + ("newVirusTestsByPublishDate" | get_data(data)).areaName %}
-		{% set casesAreaName = "in " + ("newCasesByPublishDate" | get_data(data)).areaName %}
+		{% set casesAreaName = "in " + ("newCasesBySpecimenDate" | get_data(data)).areaName %}
 		{% set admissionsAreaName = "in " + ("newAdmissions" | get_data(data)).areaName %}
 		{% set vaccinationsAreaName = "in " + ("cumPeopleVaccinatedFirstDoseByPublishDate" | get_data(data)).areaName %}
-		{% set deathsAreaName = "in " + ("newDeaths28DaysByPublishDate" | get_data(data)).areaName %}
+		{% set deathsAreaName = "in " + ("newDeaths28DaysByDeathDate" | get_data(data)).areaName %}
 	{% endif %}
 
 	<main>

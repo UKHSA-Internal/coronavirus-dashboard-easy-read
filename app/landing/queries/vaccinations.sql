@@ -7,7 +7,8 @@ JOIN covid19.release_reference AS rr ON rr.id = release_id
 JOIN covid19.metric_reference  AS mr ON mr.id = metric_id
 JOIN covid19.area_reference    AS ar ON ar.id = ts.area_id
 WHERE
-  area_type = 'overview'
+  area_type = 'nation'
+  AND area_name = 'England'
   AND date >= '2020-04-01'
   AND metric IN (
         'cumVaccinationFirstDoseUptakeByPublishDatePercentage',
