@@ -2,7 +2,7 @@ azure-storage-blob
 pytz
 opencensus~=0.9.0
 opencensus-ext-azure==1.1.4
-opencensus-ext-logging==0.1.0
+opencensus-ext-logging==0.1.1
 opencensus-ext-requests
 latex==0.7.0
 cython
