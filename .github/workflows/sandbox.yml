@@ -8,6 +8,8 @@ on:
 jobs:
  deploy:
   runs-on: ubuntu-latest
+  name: Deploy Easy Read to Sandbox Environment
+  environment: sandbox
 
 ## declares credentials for Azure Container Registry
   steps:
@@ -18,7 +20,7 @@ jobs:
       username: ${{ secrets.REGISTRY_USERNAME }}
       password: ${{ secrets.REGISTRY_PASSWORD }}
 
-   
+ ## Deploys to the docker image to the Easy Reader App Service  
   - name: Deploy Container to Azure App Services
     uses: azure/webapps-deploy@v2
     with:

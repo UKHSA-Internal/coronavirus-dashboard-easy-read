@@ -143,3 +143,6 @@ app/static/dist/
 .env.*
 host.json
 /app/static/css/easy_read.css
+/.vs/VSWorkspaceState.json
+/.vs/slnx.sqlite
+/.vs/coronavirus-dashboard-easy-read/v16/.suo
