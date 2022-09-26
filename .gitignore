@@ -146,3 +146,4 @@ host.json
 /.vs/VSWorkspaceState.json
 /.vs/slnx.sqlite
 /.vs/coronavirus-dashboard-easy-read/v16/.suo
+/.vs/coronavirus-dashboard-easy-read/config/applicationhost.config
