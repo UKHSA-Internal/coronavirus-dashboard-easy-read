@@ -26,5 +26,5 @@ jobs:
     with:
       app-name: 'c19dashsbuksfe01easyread01'
       publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-      images: 'c19dashacrprod.azurecr.io/easyread-server:latest-master'
+      images: 'c19dashacrprod.azurecr.io/easyread-server:24971-master'
     
