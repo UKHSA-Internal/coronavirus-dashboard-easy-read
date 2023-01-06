@@ -11,7 +11,7 @@
 	<b>{{ rollingSum.value }}</b>&nbsp;went into hospital with coronavirus.
 	This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
 	{% if change.raw != 0 -%}
-		of <b>{{ changePercentage.value }}%</b>
+		of <b>{{ changePercentage.value | abs }}%</b>
 	{%- endif %}
 	compared to the previous 7 days.
 </p>
