@@ -1,7 +1,6 @@
 {% set first = ("cumPeopleVaccinatedFirstDoseByPublishDate" | get_data(data)) %}
 {% set second = ("cumPeopleVaccinatedSecondDoseByPublishDate" | get_data(data)) %}
 {% set third = ("cumPeopleVaccinatedThirdInjectionByPublishDate" | get_data(data)) %}
-{% set autumn = ("cumPeopleVaccinatedBoosterDoseByPublishDate" | get_data(data)) %}
 
 <h3 id="vaccinations">Vaccinations{% if first.areaName != "United Kingdom" %} in {{ first.areaName }}{% endif %}</h3>
 
@@ -19,8 +18,4 @@
 
 <p>
 	<b>{{ third.value }}</b> people had been given a booster or third dose by the end of {{ third.date }}.
-</p>
-
-<p>
-	<b>{{ autumn.value }}</b> people had been given an autumn booster by the end of {{ autumn.date }}.
 </p>
