@@ -11,7 +11,7 @@ Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date
 {\bf {{ rollingSum.value }}} went into hospital with coronavirus. This
 shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
 {% if change.raw != 0 -%}
-    of {\bf {{ changePercentage.value }}\%}
+    of {\bf {{ changePercentage.raw | abs }}\%}
 {%- endif %}
 compared to the previous 7 days.
 
