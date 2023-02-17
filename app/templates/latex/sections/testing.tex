@@ -11,6 +11,6 @@ Some people are tested more than once.
 Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }}, there have
 been {\bf {{ rollingSum.value }}} tests. This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
 {% if change.raw != 0 -%}
-of {\bf {{ changePercentage.value | abs }}\%}
+of {\bf {{ changePercentage.value }}\%}
 {%- endif %}
 compared to the previous 7 days.

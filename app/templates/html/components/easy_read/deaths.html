@@ -9,7 +9,7 @@
 	been <b>{{ rollingSum.value }}</b> deaths within 28 days of a positive coronavirus test.
 	This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}&nbsp;
 	{%- if change.raw != 0 -%}
-		of&nbsp;<b>{{ changePercentage.value | abs }}%</b>&nbsp;
+		of&nbsp;<b>{{ changePercentage.value }}%</b>&nbsp;
 	{%- endif -%}
 	compared to the previous 7 days.
 </p>

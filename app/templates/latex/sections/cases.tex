@@ -11,7 +11,7 @@ Between {{ rollingSum.rawDate | subtract_days(6) | format_date }} and {{ rolling
 {\bf {{ rollingSum.value }}} people had a confirmed positive test result.
 This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
 {% if change.raw != 0 -%}
-    of {\bf {{ changePercentage.value | abs }}\%}
+    of {\bf {{ changePercentage.value }}\%}
 {%- endif %}
 compared to the previous 7 days.
 
