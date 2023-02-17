@@ -9,7 +9,7 @@ Between {{ rollingSum.rawDate | subtract_days(6) | format_date }} and {{ rolling
 been {\bf {{ rollingSum.value }}} deaths within 28 days of a positive coronavirus test.
 This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
 {%- if change.raw != 0 %}
-	of {\bf {{ changePercentage.value }}\%}
+	of {\bf {{ changePercentage.raw | abs }}\%}
 {% endif -%}
 compared to the previous 7 days.
 
