@@ -1,7 +1,7 @@
-{% set latest = ("newDeaths28DaysByDeathDate" | get_data(data)) %}
-{% set change = ("newDeaths28DaysByDeathDateChange" | get_data(data)) %}
-{% set changePercentage = ("newDeaths28DaysByDeathDateChangePercentage" | get_data(data)) %}
-{% set rollingSum = ("newDeaths28DaysByDeathDateRollingSum" | get_data(data)) %}
+{% set latest = ("newDailyNsoDeathsByDeathDateChange" | get_data(data)) %}
+{% set change = ("newDailyNsoDeathsByDeathDateChange" | get_data(data)) %}
+{% set changePercentage = ("newDailyNsoDeathsByDeathDateChangePercentage" | get_data(data)) %}
+{% set rollingSum = ("newDailyNsoDeathsByDeathDateRollingSum" | get_data(data)) %}
 
 <h3 id="deaths">Deaths{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName }}{% endif %}</h3>
 
