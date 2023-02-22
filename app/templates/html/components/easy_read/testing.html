@@ -10,7 +10,7 @@
 <p>Between {{ latest.rawDate | subtract_days(6) | format_date }} and {{ latest.date }}, there have
 	been&nbsp;<b>{{ rollingSum.value }}</b>&nbsp;tests. This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
 	{% if change.raw != 0 -%}
-		of <b>{{ changePercentage.value }}%</b>
+		of <b>{{ changePercentage.raw | abs }}%</b>
 	{%- endif %}
 	compared to the previous 7 days.
 </p>
