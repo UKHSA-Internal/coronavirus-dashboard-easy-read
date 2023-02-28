@@ -48,12 +48,11 @@ metrics = [
     'cumPeopleVaccinatedSecondDoseByPublishDate',
     'cumPeopleVaccinatedThirdInjectionByPublishDate',
 
-    'newDeaths28DaysByDeathDate',
-    'newDeaths28DaysByDeathDateChange',
-    'newDeaths28DaysByDeathDateChangePercentage',
-    'newDeaths28DaysByDeathDateRollingSum',
-    'newDeaths28DaysByDeathDateDirection',
-    'newDeaths28DaysByDeathDateRollingRate',
+    'newDailyNsoDeathsByDeathDateChange',
+    'newDailyNsoDeathsByDeathDateRollingSum',
+    'newDailyNsoDeathsByDeathDateChangePercentage',
+    'newDailyNsoDeathsByDeathDateDirection',
+    'newDailyNsoDeathsByDeathDate',
 
     'newCasesBySpecimenDate',
     'newCasesBySpecimenDateChange',

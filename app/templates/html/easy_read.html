@@ -21,7 +21,7 @@
 		{% set casesAreaName = "in " + ("newCasesBySpecimenDate" | get_data(data)).areaName %}
 		{% set admissionsAreaName = "in " + ("newAdmissions" | get_data(data)).areaName %}
 		{% set vaccinationsAreaName = "in " + ("cumPeopleVaccinatedFirstDoseByPublishDate" | get_data(data)).areaName %}
-		{% set deathsAreaName = "in " + ("newDeaths28DaysByDeathDate" | get_data(data)).areaName %}
+		{% set deathsAreaName = "in " + ("newDailyNsoDeathsByDeathDateRollingSum" | get_data(data)).areaName %}
 	{% endif %}
 
 	<main>
