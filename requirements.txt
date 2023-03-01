@@ -1,4 +1,4 @@
-MarkupSafe==2.1.1
+MarkupSafe==2.1.2
 PyYAML==6.0
 aiofiles==0.8.0
 aiohttp==3.8.1
