@@ -47,6 +47,7 @@ metrics = [
     'cumPeopleVaccinatedFirstDoseByPublishDate',
     'cumPeopleVaccinatedSecondDoseByPublishDate',
     'cumPeopleVaccinatedThirdInjectionByPublishDate',
+    'cumPeopleVaccinatedAutumn22ByVaccinationDate50+',
 
     'newDailyNsoDeathsByDeathDateChange',
     'newDailyNsoDeathsByDeathDateRollingSum',
