@@ -6,7 +6,7 @@
 \section{Deaths{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | trim_area_name }}{% endif %}}
 
 Between {{ rollingSum.rawDate | subtract_days(6) | format_date }} and {{ rollingSum.date }}, there have
-been {\bf {{ rollingSum.value }}} deaths within 28 days of a positive coronavirus test.
+been {\bf {{ rollingSum.value }}} deaths with COVID-19 on the death certificate.
 This shows {{ change.raw | comparison_verb("an increase", "a decrease", "no change" ) }}
 {%- if change.raw != 0 %}
 	of {\bf {{ changePercentage.raw | abs }}\%}
