@@ -59,7 +59,7 @@ rsa==4.8
 shutilwhich==1.1.0 
 six==1.16.0 
 sniffio==1.2.0 
-starlette==0.20.0 
+starlette==0.26.1 
 tempdir==0.7.1 
 typing-extensions==4.2.0 
 urllib3==1.26.9 
