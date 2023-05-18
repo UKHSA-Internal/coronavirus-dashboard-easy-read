@@ -25,7 +25,7 @@ FROM (
     WHERE
           area_type = 'nation'
       AND area_name = 'England'
-      AND date > ( DATE($1) - INTERVAL '36 days' )
+      AND date > ( DATE($1) - INTERVAL '56 days' )
       AND metric = ANY( $2::VARCHAR[] )
     GROUP BY area_type, area_code, date, metric
 ) AS result
