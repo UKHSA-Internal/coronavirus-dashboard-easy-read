@@ -1,16 +1,5 @@
-{% set first = ("cumPeopleVaccinatedFirstDoseByPublishDate" | get_data(data)) %}
-{% set second = ("cumPeopleVaccinatedSecondDoseByPublishDate" | get_data(data)) %}
-{% set third = ("cumPeopleVaccinatedThirdInjectionByPublishDate" | get_data(data)) %}
-{% set booster = ("cumPeopleVaccinatedAutumn22ByVaccinationDate50+" | get_data(data)) %}
+{% set booster = ("cumPeopleVaccinatedSpring23ByVaccinationDate75plus" | get_data(data)) %}
 
-\section{Vaccinations{% if first.areaName != "United Kingdom" %} in {{ first.areaName | trim_area_name }}{% endif %} }
+\section{Vaccinations{% if booster.areaName != "United Kingdom" %} in {{ booster.areaName | trim_area_name }}{% endif %} }
 
-Vaccines are given in several doses.
-
-{\bf {{ first.value }}} people had been given a first dose by the end of {{ first.date }}.
-
-{\bf {{ second.value }}} people had been given a second dose by the end of {{ second.date }}.
-
-{\bf {{ third.value }}} people had been given a booster or third dose by the end of {{ third.date }}.
-
-{\bf {{ booster.value }}} people had been given an autumn booster by the end of {{ booster.date }}.
+{\bf {{ booster.value }}} people had been given a spring booster by the end of {{ booster.date }}.
