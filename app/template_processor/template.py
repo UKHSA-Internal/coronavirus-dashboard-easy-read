@@ -15,7 +15,7 @@ from pandas import DataFrame
 
 from pytz import timezone
 
-# Internal: 
+# Internal:
 from ..config import Settings
 from .types import DataItem
 from ..common.utils import get_release_timestamp
@@ -233,10 +233,10 @@ def as_date(latest_timestamp: str) -> str:
 
 @as_template_filter
 def pluralise(number, singular, plural, null=str()):
-    if abs(number) > 1:
+    if number and abs(number) > 1:
         return plural
 
-    if abs(number) == 1:
+    if number and abs(number) == 1:
         return singular
 
     if number == 0 and not len(null):
