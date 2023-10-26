@@ -36,6 +36,17 @@ queries_dir = join_path(curr_dir, "queries")
 with open(join_path(queries_dir, "overview_data.sql")) as fp:
     overview_data_query = fp.read()
 
+with open(join_path(queries_dir, "table_names.sql")) as fp_tables:
+    table_names_query = fp_tables.read()
+
+virus_test_metrics = [
+    'newVirusTestsByPublishDate',
+    'newVirusTestsByPublishDateChange',
+    'newVirusTestsByPublishDateChangePercentage',
+    'newVirusTestsByPublishDateRollingSum',
+    'newVirusTestsByPublishDateDirection',
+]
+
 
 metrics = [
     'newAdmissions',
@@ -59,11 +70,7 @@ metrics = [
     'newCasesBySpecimenDateDirection',
     'newCasesBySpecimenDateRollingRate',
 
-    'newVirusTestsByPublishDate',
-    'newVirusTestsByPublishDateChange',
-    'newVirusTestsByPublishDateChangePercentage',
-    'newVirusTestsByPublishDateRollingSum',
-    'newVirusTestsByPublishDateDirection',
+    *virus_test_metrics,
 
     'transmissionRateMin',
     'transmissionRateMax',
@@ -75,14 +82,46 @@ metrics = [
 ]
 
 
+async def get_latest_records(conn: Connection, record_metrics, pattern):
+    # Get a list of tables that match the pattern
+    records = await conn.fetch(table_names_query, pattern)
+    tables = [record[0] for record in records]
+
+    # Sort tables based on the date in their name
+    def extract_date(tname):
+        match = re.search(r'(\d{4}_\d{1,2}_\d{1,2})', tname)
+        if match:
+            date_parts = match.group(1).split("_")
+            return "-".join([date_parts[0], date_parts[1].zfill(2), date_parts[2].zfill(2)])
+        return ''
+    tables.sort(key=extract_date, reverse=True)
+
+    # Query each table for the latest row with metric = 'newBat'
+    for table in tables:
+        table_date = extract_date(table).replace("_", "-")
+        ts = datetime.fromisoformat(table_date.replace("5Z", ""))
+        query = overview_data_query.format(partition=f"{ts:%Y_%-m_%-d}_other")
+        # query = overview_data_query.format(partition="{:%Y}_{:n}_{:n}_other".format(ts, ts.month, ts.day))
+
+        result = await conn.fetch(query, ts, record_metrics)
+        if result:
+            return result
+    return None
+
+
 async def get_landing_data(conn, timestamp):
     ts = datetime.fromisoformat(timestamp.replace("5Z", ""))
     query = overview_data_query.format(partition=f"{ts:%Y_%-m_%-d}_other")
 
-    values = conn.fetch(query, ts, metrics)
+    # Get latest available virus test records
+    values = await conn.fetch(query, ts, metrics)
+    if not any(val['metric'] == virus_test_metrics[0] for val in values):
+        values_virus_test = await get_latest_records(conn, virus_test_metrics, pattern="time_series_p%_other")
+        if values_virus_test:
+            values += values_virus_test
 
     df = DataFrame(
-        await values,
+        values,
         columns=["areaCode", "areaType", "areaName", "date", "metric", "value", "rank"]
     )
 
