@@ -1,7 +1,7 @@
-{% set latest = ("newVirusTestsByPublishDate" | get_data(data)) %}
-{% set change = ("newVirusTestsByPublishDateChange" | get_data(data)) %}
-{% set changePercentage = ("newVirusTestsByPublishDateChangePercentage" | get_data(data)) %}
-{% set rollingSum = ("newVirusTestsByPublishDateRollingSum" | get_data(data)) %}
+{% set latest = ("newVirusTestsBySpecimenDate" | get_data(data)) %}
+{% set change = ("newVirusTestsBySpecimenDateChange" | get_data(data)) %}
+{% set changePercentage = ("newVirusTestsBySpecimenDateChangePercentage" | get_data(data)) %}
+{% set rollingSum = ("newVirusTestsBySpecimenDateRollingSum" | get_data(data)) %}
 
 \section{Testing{% if latest.areaName != "United Kingdom" %} in {{ latest.areaName | trim_area_name }}{% endif %} }
 
