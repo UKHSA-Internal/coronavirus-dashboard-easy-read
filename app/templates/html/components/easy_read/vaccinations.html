@@ -1,4 +1,4 @@
-{% set booster = ("cumPeopleVaccinatedSpring23ByVaccinationDate75plus" | get_data(data)) %}
+{% set booster = ("cumPeopleVaccinatedAutumn23ByVaccinationDate65plus" | get_data(data)) %}
 
 <h3 id="vaccinations">Vaccinations{% if booster.areaName != "United Kingdom" %} in {{ booster.areaName }}{% endif %}</h3>
 
