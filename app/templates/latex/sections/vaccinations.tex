@@ -1,4 +1,4 @@
-{% set booster = ("cumPeopleVaccinatedSpring23ByVaccinationDate75plus" | get_data(data)) %}
+{% set booster = ("cumPeopleVaccinatedAutumn23ByVaccinationDate65plus" | get_data(data)) %}
 
 \section{Vaccinations{% if booster.areaName != "United Kingdom" %} in {{ booster.areaName | trim_area_name }}{% endif %} }
 

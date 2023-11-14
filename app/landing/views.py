@@ -44,7 +44,7 @@ metrics = [
     'newAdmissionsRollingSum',
     'newAdmissionsDirection',
 
-    'cumPeopleVaccinatedSpring23ByVaccinationDate75plus',
+    "cumPeopleVaccinatedAutumn23ByVaccinationDate65plus",
 
     'newDailyNsoDeathsByDeathDateChange',
     'newDailyNsoDeathsByDeathDateRollingSum',
